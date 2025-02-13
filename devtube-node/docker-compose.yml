@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - REDIS_HOST=redis
+      - MONGO_DB_URL=mongodb:27017/videoTube
+    depends_on:
+      - redis
+      - mongodb
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  mongodb:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
