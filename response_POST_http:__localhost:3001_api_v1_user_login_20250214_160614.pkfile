@@ -1,0 +1,55 @@
+{
+ "request": {
+  "Body": {
+   "email": "pradeepkumarbgs62019@gmail.com",
+   "password": "pradeep"
+  },
+  "Headers": {
+   "Method": "POST"
+  },
+  "URL": "http://localhost:3001/api/v1/user/login"
+ },
+ "response": {
+  "Body": "eyJtZXNzYWdlIjoiVXNlciBsb2dnZWQgaW4gc3VjY2Vzc2Z1bGx5IiwidXNlciI6eyJfaWQiOiI2N2FiMTFkYTZkOWI5YTQxZTFjZDYyMDMiLCJ1c2VybmFtZSI6InByYWRlZXAiLCJlbWFpbCI6InByYWRlZXBrdW1hcmJnczYyMDE5QGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiUHJhZGVlcCBrdW1hciIsImF2YXRhciI6Imh0dHA6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZHBnaXlia2piL2ltYWdlL3VwbG9hZC92MTczOTI2NDQ2OS9nOWpobWQ5emZpd20zbXBxaTVuYS5wbmciLCJjb3ZlckltYWdlIjoiaHR0cDovL3Jlcy5jbG91ZGluYXJ5LmNvbS9kcGdpeWJramIvaW1hZ2UvdXBsb2FkL3YxNzM5MjY0NDcwL3d2ZXZta2VtYWduem9xYmI2b3ZmLnBuZyIsIndhdGNoSGlzdG9yeSI6W10sImNyZWF0ZWRBdCI6IjIwMjUtMDItMTFUMDk6MDE6MTQuMzczWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDItMTRUMTA6MzY6MTQuNTA4WiIsIl9fdiI6MH0sImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmZhV1FpT2lJMk4yRmlNVEZrWVRaa09XSTVZVFF4WlRGalpEWXlNRE1pTENKcFlYUWlPakUzTXprMU1qa3pOelFzSW1WNGNDSTZNVGMwTURNNU16TTNOSDAub21vSzRIUDV0SE1LWFEtblZkSHdQTC1aRXJxQ2JtY1VCN2J2UU1tN04tQSIsInJlZnJlc2hUb2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpmYVdRaU9pSTJOMkZpTVRGa1lUWmtPV0k1WVRReFpURmpaRFl5TURNaUxDSmxiV0ZwYkNJNkluQnlZV1JsWlhCcmRXMWhjbUpuY3pZeU1ERTVRR2R0WVdsc0xtTnZiU0lzSW5WelpYSnVZVzFsSWpvaWNISmhaR1ZsY0NJc0ltWjFiR3h1WVcxbElqb2lVSEpoWkdWbGNDQnJkVzFoY2lJc0ltbGhkQ0k2TVRjek9UVXlPVE0zTkN3aVpYaHdJam94TnpRd016a3pNemMwZlEuMTdtM2JTaVhwN2RsMXZsQThZSEg3c0M2aERsVFctcFh6MW5abXhLWlUydyJ9",
+  "Headers": {
+   "Access-Control-Allow-Credentials": [
+    "false"
+   ],
+   "Access-Control-Allow-Headers": [
+    "Content-Type,Authorization"
+   ],
+   "Access-Control-Allow-Methods": [
+    "GET,POST,PUT,DELETE"
+   ],
+   "Access-Control-Allow-Origin": [
+    "*"
+   ],
+   "Cache-Control": [
+    "no-cache"
+   ],
+   "Content-Length": [
+    "972"
+   ],
+   "Content-Security-Policy": [
+    "default-src 'self'"
+   ],
+   "Content-Type": [
+    "application/json; charset=utf-8"
+   ],
+   "Date": [
+    "Fri, 14 Feb 2025 10:36:14 GMT"
+   ],
+   "Set-Cookie": [
+    "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2FiMTFkYTZkOWI5YTQxZTFjZDYyMDMiLCJpYXQiOjE3Mzk1MjkzNzQsImV4cCI6MTc0MDM5MzM3NH0.omoK4HP5tHMKXQ-nVdHwPL-ZErqCbmcUB7bvQMm7N-A; HttpOnly; SameSite=Lax",
+    "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2FiMTFkYTZkOWI5YTQxZTFjZDYyMDMiLCJlbWFpbCI6InByYWRlZXBrdW1hcmJnczYyMDE5QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicHJhZGVlcCIsImZ1bGxuYW1lIjoiUHJhZGVlcCBrdW1hciIsImlhdCI6MTczOTUyOTM3NCwiZXhwIjoxNzQwMzkzMzc0fQ.17m3bSiXp7dl1vlA8YHH7sC6hDlTW-pXz1nZmxKZU2w; HttpOnly; SameSite=Lax"
+   ],
+   "X-Content-Type-Options": [
+    "nosniff"
+   ],
+   "X-Frame-Options": [
+    "DENY"
+   ]
+  },
+  "Status": "200 OK"
+ }
+}
