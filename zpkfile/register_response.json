@@ -1,0 +1,64 @@
+{
+ "request": {
+  "Body": {
+   "email": "pradeepkumarbgs62019@gmail.com",
+   "fullname": "pradeep kumar",
+   "password": "pradeep",
+   "username": "pradeep"
+  },
+  "Headers": {
+   "Method": "POST"
+  },
+  "URL": "http://localhost:8080/api/v1/user/register"
+ },
+ "response": {
+  "Body": "eyJzdGF0dXMiOjIwMCwibWVzc2FnZSI6IkZpbGVzIHVwbG9hZGVkIHN1Y2Nlc3NmdWxseSJ9",
+  "Headers": {
+   "Access-Control-Allow-Credentials": [
+    "false"
+   ],
+   "Access-Control-Allow-Headers": [
+    "Content-Type,Authorization"
+   ],
+   "Access-Control-Allow-Methods": [
+    "GET,POST,PUT,DELETE"
+   ],
+   "Access-Control-Allow-Origin": [
+    "*"
+   ],
+   "Cache-Control": [
+    "no-cache"
+   ],
+   "Connection": [
+    "keep-alive"
+   ],
+   "Content-Length": [
+    "54"
+   ],
+   "Content-Security-Policy": [
+    "default-src 'self'"
+   ],
+   "Content-Type": [
+    "application/json; charset=utf-8"
+   ],
+   "Date": [
+    "Fri, 14 Feb 2025 12:39:05 GMT"
+   ],
+   "Server": [
+    "nginx/1.18.0 (Ubuntu)"
+   ],
+   "X-Content-Type-Options": [
+    "nosniff"
+   ],
+   "X-Frame-Options": [
+    "DENY"
+   ]
+  },
+  "Status": "200 OK"
+ }
+}
+,
+  "Status": "409 Conflict"
+ }
+}
+

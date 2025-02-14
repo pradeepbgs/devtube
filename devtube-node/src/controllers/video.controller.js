@@ -269,7 +269,7 @@ const videoDetails = asyncHandler(async (req, res) => {
         title: 1,
         description: 1,
         thumbnail: 1,
-        videoFile: 1,
+        url: 1,
         owner: {
           _id: 1,
           fullname: 1,

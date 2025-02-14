@@ -1,3 +1,5 @@
 api.json
 root.cookie.pkfile
 .env**
+/*node_modules
+/*.venv
