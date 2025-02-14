@@ -40,32 +40,33 @@ export class UserService {
      */
     SignUp = async (ctx: ContextType) => {
         try {
-            const { fullname, email, username, password } = await ctx.body;
-    
+            const { fullname, email, username, password} = await ctx.body;
+            const { avatar, coverImage } = ctx.req.files;
+
             if (!fullname || !email || !username || !password) {
                 console.log("all fields are required")
                 return ctx.json({ status: 400, message: "All fields are required" }, 400);
             }
-    
+
             const existingUser: UserDocument | null = await this.userRepository.FindExistingUser(email, username);
             if (existingUser) {
                 console.log("user already exists with this username or email")
                 return ctx.json({ status: 409, message: "User already exists with this username or email" }, 409)
             }
-            
+
             const user: UserDocument = await this.userRepository.CreateUser({
                 fullname,
                 email,
                 password,
                 username: username.toLowerCase(),
             });
-            
+
             if (!user) {
                 console.log("user creation failed")
                 return ctx.json({ status: 500, message: "User creation failed" }, 500);
             }
-    
-           return ctx.json({ message: "User created successfully", user }, 201);
+
+            return ctx.json({ message: "User created successfully", user }, 201);
         } catch (error) {
             console.log("error while signing up", error)
             return ctx.json({ status: 500, message: "Something went wrong while signing up" }, 500);

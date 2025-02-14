@@ -5,6 +5,7 @@ import { UserService } from "./service/user.service";
 import { UserRepository } from "./repository/user.repository";
 import { securityMiddleware } from "diesel-core/security";
 import { cors } from "diesel-core/cors";
+import { fileSaveMiddleware } from "./middleware/saveFile";
 
 const app = new Diesel();
 const port = process.env.PORT ?? 3001;
@@ -76,6 +77,6 @@ app.addHooks("routeNotFound", (ctx: ContextType) => {
 });
 
 app.post("/api/v1/user/login", userController.LoginUser);
-app.post("/api/v1/user/register", userController.RegisterUser);
+app.post("/api/v1/user/register", fileSaveMiddleware,userController.RegisterUser);
 
 app.listen(port, () => log("info", `Server started on port ${port}`));
