@@ -1,17 +1,26 @@
 import type { ContextType, CookieOptions } from "diesel-core";
 import { UserRepository } from "../repository/user.repository";
 import { type UserDocument } from "../model/user.model";
-import type { mongo } from "mongoose";
+import type  {Types} from "mongoose";
+import { publishMessage } from "./rabbitMQ/producer";
+import { CleanUpResource } from "../utils/cleanup";
 
 export class UserService {
     private userRepository: UserRepository;
+    private static instance: UserService;
 
     constructor(repository: UserRepository) {
         this.userRepository = repository;
     }
+    public static getInstance(repository:UserRepository): UserService {
+        if (!UserService.instance) {
+            UserService.instance = new UserService(repository);
+        }
+        return UserService.instance;
+    }
 
 
-    generateAccessAndRefreshToken = async (userId: mongo.ObjectId) => {
+    generateAccessAndRefreshToken = async (userId: Types.ObjectId) => {
         try {
             const user = await this.userRepository.FindById(userId);
             if (!user) {
@@ -45,12 +54,18 @@ export class UserService {
 
             if (!fullname || !email || !username || !password) {
                 console.log("all fields are required")
+                if (avatar || coverImage) {
+                    CleanUpResource(avatar,coverImage)
+                }
                 return ctx.json({ status: 400, message: "All fields are required" }, 400);
             }
 
             const existingUser: UserDocument | null = await this.userRepository.FindExistingUser(email, username);
             if (existingUser) {
                 console.log("user already exists with this username or email")
+                if (avatar || coverImage) {
+                    CleanUpResource(avatar,coverImage)
+                }
                 return ctx.json({ status: 409, message: "User already exists with this username or email" }, 409)
             }
 
@@ -63,14 +78,27 @@ export class UserService {
 
             if (!user) {
                 console.log("user creation failed")
+                if (avatar || coverImage) {
+                    CleanUpResource(avatar,coverImage)
+                }
                 return ctx.json({ status: 500, message: "User creation failed" }, 500);
             }
+
+            publishMessage({
+                userId: user._id,
+                avatar: avatar || null,
+                coverImage: coverImage || null,
+                action: "UPLOAD_IMAGES",
+            });
 
             return ctx.json({ message: "User created successfully", user }, 201);
         } catch (error) {
             console.log("error while signing up", error)
+            if (ctx.req.files) {
+                CleanUpResource(ctx.req.files.avatar, ctx.req.files.coverImage)
+            }
             return ctx.json({ status: 500, message: "Something went wrong while signing up" }, 500);
-        }
+        } 
     }
 
     /**
@@ -97,9 +125,9 @@ export class UserService {
                 return ctx.json({ status: 401, message: "Invalid credentials" }, 401);
             }
 
-            const { accessToken, refreshToken } = await this.generateAccessAndRefreshToken(user._id as mongo.ObjectId);
+            const { accessToken, refreshToken } = await this.generateAccessAndRefreshToken(user._id as Types.ObjectId);
 
-            const loggedInUser = await this.userRepository.FindById(user._id as mongo.ObjectId);
+            const loggedInUser = await this.userRepository.FindById(user._id as Types.ObjectId);
 
             const cookieOptions: CookieOptions = {
                 httpOnly: true,

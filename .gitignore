@@ -3,3 +3,4 @@ root.cookie.pkfile
 .env**
 /*node_modules
 /*.venv
+zpkfile

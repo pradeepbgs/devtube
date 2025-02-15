@@ -6,6 +6,7 @@ import { UserRepository } from "./repository/user.repository";
 import { securityMiddleware } from "diesel-core/security";
 import { cors } from "diesel-core/cors";
 import { fileSaveMiddleware } from "./middleware/saveFile";
+import { StartConsuming } from "./service/rabbitMQ/consumer";
 
 const app = new Diesel();
 const port = process.env.PORT ?? 3001;
@@ -14,9 +15,9 @@ const log = (level: string, message: string, meta?: object) => {
     console.log(JSON.stringify({ level, message, timestamp: new Date().toISOString(), ...meta }));
 };
 
-const userRepository = new UserRepository();
-const userService = new UserService(userRepository);
-const userController = new UserController(userService);
+const userRepository = UserRepository.getInstance()
+const userService = UserService.getInstance(userRepository)
+const userController = UserController.getInstance(userService)
 
 app.use(
     cors({
@@ -32,9 +33,13 @@ app
     .routeMatcher("/api/v1/user/register", "/api/v1/user/login")
     .permitAll();
 
-connectDB()
+await connectDB()
     .then((db) => log("info", `MongoDB connected`, { host: db.connection.host }))
-    .catch((error) => log("error", "MongoDB Connection Failed", { error: error.message }));
+    .then(() => StartConsuming())
+    .catch((error) => {
+        log("error", "MongoDB Connection Failed", { error: error.message })
+        process.exit(1);
+    });
 
 app.addHooks("onRequest", async (req: Request, url: URL) => {
     const start = Date.now();
@@ -77,6 +82,6 @@ app.addHooks("routeNotFound", (ctx: ContextType) => {
 });
 
 app.post("/api/v1/user/login", userController.LoginUser);
-app.post("/api/v1/user/register", fileSaveMiddleware,userController.RegisterUser);
+app.post("/api/v1/user/register", fileSaveMiddleware, userController.RegisterUser);
 
 app.listen(port, () => log("info", `Server started on port ${port}`));
