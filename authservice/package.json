@@ -14,9 +14,12 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@types/amqplib": "^0.10.6",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.8",
+    "amqplib": "^0.10.5",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.5.1",
     "diesel-core": "^1.0.17",
     "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",

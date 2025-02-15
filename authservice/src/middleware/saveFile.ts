@@ -16,7 +16,6 @@ if (!fs.existsSync(uploadDir)) {
 export const fileSaveMiddleware = async (ctx: ContextType) => {
     try {
         const { avatar, coverImage } = await ctx.body;
-
         if (!ctx.req.files) {
             ctx.req.files = {};
         }
@@ -36,8 +35,6 @@ export const fileSaveMiddleware = async (ctx: ContextType) => {
 
             ctx.req.files.coverImage = coverImageSavePath;
         }
-
-        return ctx.json({ status: 200, message: "Files uploaded successfully" });
 
     } catch (error) {
         console.error("File upload error:", error);
