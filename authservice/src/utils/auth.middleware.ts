@@ -26,7 +26,7 @@ export const verifyJwt = async(ctx:ContextType) => {
         }
 
        ctx.set("user", user);
-        
+        return null
     } catch (error) {
         // Log the error and continue without setting req.user
         console.error("Error verifying token:", error);

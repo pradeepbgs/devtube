@@ -150,4 +150,13 @@ export class UserService {
         }
     };
 
+    Update = async (ctx:ContextType) => {
+        try {
+            const user = ctx.get('user')
+           return ctx.send(user) 
+        } catch (error) {
+            
+        }
+    }
+
 }
