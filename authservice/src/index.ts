@@ -10,7 +10,7 @@ import { StartConsuming } from "./service/rabbitMQ/consumer";
 import { verifyJwt } from "./utils/auth.middleware";
 
 const app = new Diesel();
-const port = process.env.PORT ?? 3001;
+const port = process.env.PORT
 
 const log = (level: string, message: string, meta?: object) => {
     console.log('\n' + JSON.stringify({ level, message, timestamp: new Date().toISOString(), ...meta }) + '\n');
@@ -85,6 +85,6 @@ app.addHooks("routeNotFound", (ctx: ContextType) => {
 
 app.post("/api/v1/user/login", userController.LoginUser);
 app.post("/api/v1/user/register", fileSaveMiddleware, userController.RegisterUser);
-app.get("/api/v1/user/update", userController.UpdateUser);
+app.put("/api/v1/user/update", userController.UpdateUser);
 
 app.listen(port,"0.0.0.0",  () => log("info", `Server started on port ${port}`));

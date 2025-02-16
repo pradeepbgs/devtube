@@ -1,7 +1,7 @@
 import type { ContextType, CookieOptions } from "diesel-core";
 import { UserRepository } from "../repository/user.repository";
 import { type UserDocument } from "../model/user.model";
-import type  {Types} from "mongoose";
+import type { Types } from "mongoose";
 import { publishMessage } from "./rabbitMQ/producer";
 import { CleanUpResource } from "../utils/cleanup";
 
@@ -12,7 +12,7 @@ export class UserService {
     constructor(repository: UserRepository) {
         this.userRepository = repository;
     }
-    public static getInstance(repository:UserRepository): UserService {
+    public static getInstance(repository: UserRepository): UserService {
         if (!UserService.instance) {
             UserService.instance = new UserService(repository);
         }
@@ -49,13 +49,13 @@ export class UserService {
      */
     SignUp = async (ctx: ContextType) => {
         try {
-            const { fullname, email, username, password} = await ctx.body;
+            const { fullname, email, username, password } = await ctx.body;
             const { avatar, coverImage } = ctx.req.files;
 
             if (!fullname || !email || !username || !password) {
                 console.log("all fields are required")
                 if (avatar || coverImage) {
-                    CleanUpResource(avatar,coverImage)
+                    CleanUpResource(avatar, coverImage)
                 }
                 return ctx.json({ status: 400, message: "All fields are required" }, 400);
             }
@@ -64,7 +64,7 @@ export class UserService {
             if (existingUser) {
                 console.log("user already exists with this username or email")
                 if (avatar || coverImage) {
-                    CleanUpResource(avatar,coverImage)
+                    CleanUpResource(avatar, coverImage)
                 }
                 return ctx.json({ status: 409, message: "User already exists with this username or email" }, 409)
             }
@@ -79,7 +79,7 @@ export class UserService {
             if (!user) {
                 console.log("user creation failed")
                 if (avatar || coverImage) {
-                    CleanUpResource(avatar,coverImage)
+                    CleanUpResource(avatar, coverImage)
                 }
                 return ctx.json({ status: 500, message: "User creation failed" }, 500);
             }
@@ -98,7 +98,7 @@ export class UserService {
                 CleanUpResource(ctx.req.files.avatar, ctx.req.files.coverImage)
             }
             return ctx.json({ status: 500, message: "Something went wrong while signing up" }, 500);
-        } 
+        }
     }
 
     /**
@@ -150,12 +150,44 @@ export class UserService {
         }
     };
 
-    Update = async (ctx:ContextType) => {
+    Update = async (ctx: ContextType) => {
         try {
-            const user = ctx.get('user')
-           return ctx.send(user) 
+
+            const authUser: any = ctx.get('user')
+            const { username, fullname } = await ctx.body
+            const { avatar, coverImage } = ctx.req.files ?? {}
+            const updatedData: Record<string, string> = {}
+
+            if (username) updatedData.username = username
+            if (fullname) updatedData.fullname = fullname
+
+            const user: UserDocument | null = await this.userRepository.FindById(authUser?._id);
+            if (!user) {
+                console.log("User not found");
+                return ctx.json({ status: 404, message: "User not found" }, 404);
+            }
+
+            if (avatar || coverImage) {
+                publishMessage({
+                    userId: user._id,
+                    avatar: avatar || null,
+                    coverImage: coverImage || null,
+                    action: "UPLOAD_IMAGES",
+                });
+
+            }
+
+            if(Object.keys(updatedData).length == 0){
+                return ctx.json({ status: 400, message: "No data to update" }, 400);
+            }
+            await this.userRepository.UpdateUser(user._id as Types.ObjectId, updatedData)
+
+            const updatedUser = await this.userRepository.FindById(user._id as Types.ObjectId);
+
+            return ctx.json({ message: "User updated successfully", user:updatedUser }, 200);
         } catch (error) {
-            
+            console.log("Error while updating user", error);
+            return ctx.json({ status: 500, message: "Something went wrong while updating user" }, 500);
         }
     }
 
