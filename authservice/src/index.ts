@@ -7,12 +7,13 @@ import { securityMiddleware } from "diesel-core/security";
 import { cors } from "diesel-core/cors";
 import { fileSaveMiddleware } from "./middleware/saveFile";
 import { StartConsuming } from "./service/rabbitMQ/consumer";
+import { verifyJwt } from "./utils/auth.middleware";
 
 const app = new Diesel();
 const port = process.env.PORT ?? 3001;
 
 const log = (level: string, message: string, meta?: object) => {
-    console.log(JSON.stringify({ level, message, timestamp: new Date().toISOString(), ...meta }));
+    console.log('\n' + JSON.stringify({ level, message, timestamp: new Date().toISOString(), ...meta }) + '\n');
 };
 
 const userRepository = UserRepository.getInstance()
@@ -31,7 +32,8 @@ app.use(securityMiddleware);
 app
     .setupFilter()
     .routeMatcher("/api/v1/user/register", "/api/v1/user/login")
-    .permitAll();
+    .permitAll()
+    .authenticate([verifyJwt])
 
 await connectDB()
     .then((db) => log("info", `MongoDB connected`, { host: db.connection.host }))
@@ -65,7 +67,7 @@ app.addHooks("postHandler", (ctx: ContextType) => {
         // status: ctx.statusCode,
         duration: `${duration}ms`,
     });
-});
+})
 
 app.addHooks("onError", (error: any, req: Request, url: URL) => {
     log("error", "Unhandled Error", {
@@ -74,14 +76,15 @@ app.addHooks("onError", (error: any, req: Request, url: URL) => {
         method: req.method,
         url,
     });
-});
+})
 
 app.addHooks("routeNotFound", (ctx: ContextType) => {
     log("warn", "Route Not Found", { url: ctx.req.url, method: ctx.req.method });
     return ctx.json({ message: "Route not found" }, 404);
-});
+})
 
 app.post("/api/v1/user/login", userController.LoginUser);
 app.post("/api/v1/user/register", fileSaveMiddleware, userController.RegisterUser);
+app.get("/api/v1/user/update", userController.UpdateUser);
 
-app.listen(port, () => log("info", `Server started on port ${port}`));
+app.listen(port,"0.0.0.0",  () => log("info", `Server started on port ${port}`));

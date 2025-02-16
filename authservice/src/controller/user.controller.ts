@@ -23,5 +23,9 @@ export class UserController {
     RegisterUser = async (ctx: ContextType) => {
       return await this.userService.SignUp(ctx);
     };
+
+    UpdateUser = async (ctx:ContextType) => {
+      return await this.userService.Update(ctx);
+    }
   }
   
