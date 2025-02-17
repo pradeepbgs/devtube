@@ -4,6 +4,7 @@ import { type UserDocument } from "../model/user.model";
 import type { Types } from "mongoose";
 import { publishMessage } from "./rabbitMQ/producer";
 import { CleanUpResource } from "../utils/cleanup";
+import { uploadOnCloudinary } from "../utils/cloduinary";
 
 export class UserService {
     private userRepository: UserRepository;
@@ -155,31 +156,30 @@ export class UserService {
 
             const authUser: any = ctx.get('user')
             const { username, fullname } = await ctx.body
-            const { avatar, coverImage } = ctx.req.files ?? {}
+            const { avatar, coverImage } = ctx.req.files
+            console.log("avatara file in service",avatar)
             const updatedData: Record<string, string> = {}
 
             if (username) updatedData.username = username
             if (fullname) updatedData.fullname = fullname
-
+           
             const user: UserDocument | null = await this.userRepository.FindById(authUser?._id);
             if (!user) {
                 console.log("User not found");
                 return ctx.json({ status: 404, message: "User not found" }, 404);
             }
 
-            if (avatar || coverImage) {
-                publishMessage({
-                    userId: user._id,
-                    avatar: avatar || null,
-                    coverImage: coverImage || null,
-                    action: "UPLOAD_IMAGES",
-                });
-
+            if(avatar || coverImage){
+                console.log('is avatar and coverimage')
+                const avatarResponse = await uploadOnCloudinary(avatar)
+                const coverImageResponse = await uploadOnCloudinary(coverImage)
+                console.log('avatar res',avatarResponse)
+                if(avatarResponse || coverImageResponse){
+                    updatedData.avatar = avatarResponse?.secure_url
+                    updatedData.coverImage = coverImageResponse?.secure_url
+                }
             }
 
-            if(Object.keys(updatedData).length == 0){
-                return ctx.json({ status: 400, message: "No data to update" }, 400);
-            }
             await this.userRepository.UpdateUser(user._id as Types.ObjectId, updatedData)
 
             const updatedUser = await this.userRepository.FindById(user._id as Types.ObjectId);
@@ -188,6 +188,10 @@ export class UserService {
         } catch (error) {
             console.log("Error while updating user", error);
             return ctx.json({ status: 500, message: "Something went wrong while updating user" }, 500);
+        } finally {
+            if (ctx.req.files) {
+                CleanUpResource(ctx.req.files.avatar, ctx.req.files.coverImage)
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package rabbitmq
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 	"videouploadservice/src/db"
@@ -17,6 +18,7 @@ func StartConsumingTask() {
 	if err != nil {
 		log.Fatal("Failed to connect to RabbitMQ:", err)
 	}
+	fmt.Println("Connected to rabbitmq",conn)
 	defer conn.Close()
 
 	ch, err := conn.Channel()

@@ -21,19 +21,23 @@ export const fileSaveMiddleware = async (ctx: ContextType) => {
         }
 
         if (avatar) {
+            console.log('is avtaar',avatar)
             const avatarFileName = `avatar_${uuid4()}${path.extname(avatar.name)}`;
             const avatarSavePath = path.join(uploadDir, avatarFileName);
             await Bun.write(avatarSavePath, await avatar.arrayBuffer());
 
             ctx.req.files.avatar = avatarSavePath;
+            console.log(avatarSavePath)
         }
 
         if (coverImage) {
+            console.log('is coverImage', coverImage)
             const coverImageFileName = `coverImage_${uuid4()}${path.extname(coverImage.name)}`;
             const coverImageSavePath = path.join(uploadDir, coverImageFileName);
             await Bun.write(coverImageSavePath, await coverImage.arrayBuffer());
 
             ctx.req.files.coverImage = coverImageSavePath;
+            console.log(coverImageSavePath)
         }
 
     } catch (error) {
