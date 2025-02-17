@@ -7,7 +7,7 @@ import { securityMiddleware } from "diesel-core/security";
 import { cors } from "diesel-core/cors";
 import { fileSaveMiddleware } from "./middleware/saveFile";
 import { StartConsuming } from "./service/rabbitMQ/consumer";
-import { verifyJwt } from "./utils/auth.middleware";
+import { verifyJwt } from "./middleware/auth.middleware";
 
 const app = new Diesel();
 const port = process.env.PORT
@@ -85,6 +85,6 @@ app.addHooks("routeNotFound", (ctx: ContextType) => {
 
 app.post("/api/v1/user/login", userController.LoginUser);
 app.post("/api/v1/user/register", fileSaveMiddleware, userController.RegisterUser);
-app.put("/api/v1/user/update", userController.UpdateUser);
+app.put("/api/v1/user/update", fileSaveMiddleware, userController.UpdateUser);
 
 app.listen(port,"0.0.0.0",  () => log("info", `Server started on port ${port}`));
