@@ -20,7 +20,7 @@
     "amqplib": "^0.10.5",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.1",
-    "diesel-core": "^1.0.17",
+    "diesel-core": "^1.0.20",
     "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.0",

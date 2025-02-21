@@ -79,10 +79,14 @@ app.addHooks("onError", (error: any, req: Request, url: URL) => {
 })
 
 app.addHooks("routeNotFound", (ctx: ContextType) => {
+    if (ctx.req.url.startsWith('/favicon')) return;
     log("warn", "Route Not Found", { url: ctx.req.url, method: ctx.req.method });
     return ctx.json({ message: "Route not found" }, 404);
 })
 
+app.get("/", (ctx) => {
+    return ctx.json({message:"Welcome to auth service"})
+})
 app.post("/api/v1/user/login", userController.LoginUser);
 app.post("/api/v1/user/register", fileSaveMiddleware, userController.RegisterUser);
 app.put("/api/v1/user/update", fileSaveMiddleware, userController.UpdateUser);
