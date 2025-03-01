@@ -87,9 +87,9 @@ const CommentPage = () => {
 console.log(comments)
   return (
     <>
-      <div className="border rounded-md mt-3">
+      <div className="rounded-md mt-3 h-screen">
         <div className=" px-3 mt-5 ml-1 rounded-lg">
-          <p className="mt-3">{Array.isArray(comments) && comments?.length ? " Comments" : "No Comments"}</p>
+          <p className="mt-3">{Array.isArray(comments) && comments?.length ? `${comments?.length} Comments` : "No Comments"}</p>
           <form className="mt-3 mb-4 px-2 flex">
             <img
               className="w-8 h-8 rounded-full mr-4"

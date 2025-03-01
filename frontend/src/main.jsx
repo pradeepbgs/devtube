@@ -8,21 +8,21 @@ import store from './utils/Store.js'
 const Home = lazy(() => import('./Home.jsx'));
 const Login = lazy(() => import('./app/Authentication/Login.jsx'));
 const Signup = lazy(() => import('./app/Authentication/Signup.jsx'));
-const LikedVideo = lazy(() => import('./app/pages/LikedVideo.jsx'));
+const LikedVideo = lazy(() => import('./app/channel/LikedVideo.jsx'));
 const SearchVideoListingPage = lazy(() => import('./app/searchVideoListing/SearchVideoListingPage.jsx'));
-const History = lazy(() => import('./app/pages/History.jsx'));
+const History = lazy(() => import('./app/History.jsx'));
 const Watchpage = lazy(() => import('./app/watchpage/Watchpage.jsx'));
-const ChannelDeatilsPage = lazy(() => import('./app/pages/channelDeatilsPage.jsx'));
-const ChannelVideoPage = lazy(() => import('./app/pages/ChannelVideoPage.jsx'));
-const ChannelPlayList = lazy(() => import('./app/pages/ChannelPlayList.jsx'));
-const ChannelSubscribedPage = lazy(() => import('./app/pages/ChannelSubscribedPage.jsx'));
-const ChannelPlaylistVideo = lazy(() => import('./app/pages/ChannelPlaylistVideo'));
-const ChannelTweets = lazy(() => import('./app/pages/tweet/channelTweets.jsx'));
+const ChannelDeatilsPage = lazy(() => import('./app/channel/channelDeatilsPage.jsx'));
+const ChannelVideoPage = lazy(() => import('./app/channel/ChannelVideoPage.jsx'));
+const ChannelPlayList = lazy(() => import('./app/channel/ChannelPlayList.jsx'));
+const ChannelSubscribedPage = lazy(() => import('./app/channel/ChannelSubscribedPage.jsx'));
+const ChannelPlaylistVideo = lazy(() => import('./app/channel/ChannelPlaylistVideo'));
+const ChannelTweets = lazy(() => import('./app/channel/tweet/channelTweets.jsx'));
 import Loader from './components/Loader.jsx';
-import Editinfo from './app/pages/channelEdit/Editinfo.jsx';
-import PersonalDetails from './app/pages/channelEdit/PersonalDetails.jsx';
-import ChannelDetails from './app/pages/channelEdit/ChannelDetails.jsx';
-import ChangePassword from './app/pages/channelEdit/ChangePassword.jsx';
+import Editinfo from './app/channel/channelEdit/Editinfo.jsx';
+import PersonalDetails from './app/channel/channelEdit/PersonalDetails.jsx';
+import ChannelDetails from './app/channel/channelEdit/ChannelDetails.jsx';
+import ChangePassword from './app/channel/channelEdit/ChangePassword.jsx';
 import Upload from './app/upload/Upload.jsx';
 
 const router  = createBrowserRouter([
@@ -63,7 +63,7 @@ const router  = createBrowserRouter([
             )
           },
           {
-            path: '/results/:query',
+            path: '/results',
             element: (
               <Suspense fallback={<Loader/>}>
                 <SearchVideoListingPage/>

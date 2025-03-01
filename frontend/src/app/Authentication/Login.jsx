@@ -2,30 +2,24 @@ import { useDispatch } from 'react-redux';
 import axios from "axios";
 import { useState } from "react";
 import React from "react";
-import {login} from '../../utils/authSlice'
-import { useNavigate } from 'react-router-dom';
+import { login } from '../../utils/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const loginSubmit = async (e) => {
     e.preventDefault();
-  
     try {
       const response = await axios.post(
         "/api/v1/users/login",
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
+        { email, password },
+        { withCredentials: true }
       );
       
       const { user } = response.data.data;
@@ -36,51 +30,41 @@ const Login = () => {
       setError(error?.response?.data?.message);
     }
   };
-  
-
-
 
   return (
-    <div className="text-white  w-screen h-full flex justify-center items-center ">
-      <div
-        className="bg-white w-[40vw] h-[70vh] flex justify-center 
-      items-center 
-      rounded-md bg-opacity-10"
-      >
-        <div className="text-center">
-        {error && <h1 className='text-red-400 text-xl'>{error}</h1>}
-          <h1 className="text-2xl mb-2 font-semibold">Login</h1>
-          <form
-            action=""
-            onSubmit={loginSubmit}
-            method="POST"
-            id="loginForm"
-            name="loginForm"
-            className="flex flex-col w-fit mb-3 mt-5"
-          >
-            <input
-              className="bg-gray-700 w-[30vw] px-5 mb-4 py-3 rounded-md"
-              type="email"
-              required
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              className="bg-gray-700 px-5 py-3 mb-4 rounded-md"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button className="bg-blue-500 hover:bg-blue-600 transition-all duration-300 px-5 py-3 rounded-md">
-              Login
-            </button>
-          </form>
-          <span className="hover:text-blue-400 hover:underline">
-            <a href="/signup">new ? Register</a>
-          </span>
-        </div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-900">
+      <div className="bg-gray-800 p-8 rounded-xl shadow-xl w-full max-w-lg">
+        <h1 className="text-3xl font-bold text-white text-center mb-6">Login</h1>
+        {error && <p className='text-red-500 text-center mb-4'>{error}</p>}
+        
+        <form onSubmit={loginSubmit} className="flex flex-col gap-4">
+          <input
+            className="bg-gray-700 px-4 py-3 rounded-md text-white"
+            type="email"
+            required
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            className="bg-gray-700 px-4 py-3 rounded-md text-white"
+            type="password"
+            required
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button className="bg-indigo-600 hover:bg-indigo-700 transition-all px-4 py-3 rounded-md text-white font-semibold">
+            Login
+          </button>
+        </form>
+        
+        <p className="text-gray-300 text-center mt-4">
+          Not a member yet?{' '}
+          <Link to="/signup" className="text-indigo-400 hover:underline">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );

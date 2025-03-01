@@ -28,7 +28,7 @@ function App() {
   // we refresh our page authSlice value will save the user details from localStoarge 
 ``
   return (
-    <div className='h-screen w-screen bg-black text-white flex flex-col bg-opacity-95'>
+    <div className='w-full h-[100vh] bg-gray-1000 text-white flex flex-col bg-opacity-95'>
       <Header />
       <div className='flex  overflow-auto w-full h-full'>
         <div className=''>

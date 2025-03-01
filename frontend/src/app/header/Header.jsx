@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toggleMenu, showUserIcon } from "../../utils/toggleSlice";
 import AboutUser from "./AboutUser";
+import devtubeLogo from '../../assets/devt.avif'
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,17 +21,17 @@ const Header = () => {
     e.preventDefault();
     const query = e.target.elements.search.value.trim();
     if (query !== "") {
-      navigate(`/results/${query}`);
+      navigate(`/results?query=${query}`);
     }
   };
   
 
-  useEffect(() => {}, [isLoggedIn]);
+  // useEffect(() => {}, [isLoggedIn]);
 
   return (
     <div className="w-full">
       <div>
-        <nav className="bg-black px-10 py-3 text-white text-center border border-x-0 border-t-0">
+        <nav className=" px-10 py-3 text-white text-center border border-gray-500 border-x-0 border-t-0">
           <ul className="flex justify-between items-center">
             <div className="flex items-center">
               <FaBars
@@ -44,14 +45,17 @@ const Header = () => {
                   }
                   to="/"
                 >
-                  Home
+                  <img 
+                  src={devtubeLogo}
+                  className="w-[20%] h-[20%] rounded-full"
+                  />
                 </NavLink>
               </button>
             </div>
             <div>
-              <form onSubmit={formHandler} className="flex items-center border border-gray-400 rounded-sm">
+              <form onSubmit={formHandler} className="flex items-center border border-gray-600 rounded-md">
                 <label
-                  className=" px-2 py-3 border-r-0 rounded-md"
+                  className=" px-2 py-1 border-r-0 rounded-md"
                   htmlFor=""
                 >
                   <FaSearch />
@@ -60,13 +64,13 @@ const Header = () => {
                   type="text"
                   placeholder="Search"
                   name="search" 
-                  className="bg-black text-white w-[26vw]  px-3 py-2 focus:outline-none"
+                  className="bg-[#1e1e1e] text-white w-[26vw]  px-3 py-1 focus:outline-none"
                 />
 
                 <button
                   type="submit"
-                  className="bg-black text-white px-4 py-2 ml-2 border 
-                  hover:bg-gray-600
+                  className=" text-white px-2 py-1 ml-2 bg-purple-700 
+                  hover:bg-purple-800
                   border-gray-400 border-r-0 border-b-0 border-t-0 focus:outline-none"
                 >
                   Search
@@ -76,12 +80,17 @@ const Header = () => {
             <div className="flex items-center">
               {!isLoggedIn ? (
                 <div>
-                  <button className="mr-3 bg-black hover:bg-gray-700 px-3 py-2 rounded-full focus:outline-none">
-                    <Link to="/login">Login</Link>
+                    <Link to="/login">
+                  <button className="mr-3 hover:bg-gray-700 px-3 py-1 border border-gray-700 rounded-md focus:outline-none">
+                    Login
                   </button>
-                  <button className="bg-purple-500 hover:bg-purple-700 px-3 py-2 rounded-full focus:outline-none">
-                    <Link to="/signup">Signup</Link>
+                    </Link>
+
+                    <Link to="/signup">
+                  <button className="bg-purple-500 hover:bg-purple-700 px-3 py-1 rounded-md focus:outline-none">
+                    Signup
                   </button>
+                    </Link>
                 </div>
               ) : (
                 <div

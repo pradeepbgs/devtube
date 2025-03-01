@@ -175,7 +175,7 @@ const videoUpload = asyncHandler(async (req, res) => {
       const uploadedVideo = await videoModel.create({
         title,
         description,
-        videoFile: video.url ?? "",
+        url: video.url ?? "",
         thumbnail: thumbnailUrl.url ?? "",
         duration: video.duration ?? 0,
         owner: user?._id,

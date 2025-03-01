@@ -21,7 +21,7 @@ const VideoCard = ({ video }) => {
       <div className="flex">
         <Link to={`/channel/${video?.owner?.username}`}>
           <img
-            className="w-9 h-9 bg-gray-100 rounded-full"
+            className="w-9 h-9 object-fit bg-gray-100 rounded-full"
             src={video?.owner?.avatar}
             alt={`Avatar for ${video?.owner?.fullname}`}
           />

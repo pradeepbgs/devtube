@@ -1,19 +1,22 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { FaThumbsUp, FaThumbsDown, FaSave, FaBell } from "react-icons/fa";
-import CommentPage from "./CommentPage";
 import { useSelector, useDispatch } from "react-redux";
-import { showDescription, toggleMenuFalse } from "../../utils/toggleSlice";
+import { toggleMenuFalse } from "../../utils/toggleSlice";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { toggleSubscribe } from "../../useHooks/subscribeToggle";
 import VideoPlayer from "./VideoPlayer";
 import { toggleLike } from "../../useHooks/likeVideoToggle";
 import { decreaseLikes, increaseLikes, setLikes, setVideo } from "../../utils/videoSlice";
 import { getTimeElapsed } from "../../utils/getTimeAGo";
+import Loader from "../../components/Loader";
+import Description from "../../components/Description";
+const LazyCommentPage = React.lazy(() => import("./CommentPage"));
+import ErrorPage from '../../components/Error'
 
 const Watchpage = () => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const [error, setError] = useState('')
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { videoId } = useParams();
@@ -22,14 +25,20 @@ const Watchpage = () => {
   const { user } = useSelector((state) => state.auth);
   const channelId = Video?.owner?._id;
 
-  const handleSubscribeToggle = async () => {
+  const handleSubscribeToggle = useCallback(() => {
     if (!user) {
       return navigate('/login')
     }
-    await toggleSubscribe(channelId, dispatch);
-  };
+    dispatch(setVideo({
+      ...Video,
+      isSubscribed: !Video?.isSubscribed,
+      subscribersCount: Video?.isSubscribed ? Video.subscribersCount - 1 : Video.subscribersCount + 1
+    }));
+    toggleSubscribe(channelId, dispatch);
+  }, [user, channelId, Video, dispatch]);
 
-  const toggleVideoLike = async () => {
+
+  const toggleVideoLike = useCallback(async () => {
     if (user) {
       const res = await toggleLike(videoId);
       if (res?.data?.message === "liked video") {
@@ -40,11 +49,12 @@ const Watchpage = () => {
         dispatch(decreaseLikes());
       }
     } else {
-      alert("Please login to like and subscribe");
+      return navigate('/login')
     }
-  };
+  }, [user, videoId, Video, dispatch]);
 
-  const getVideoDetails = async () => {
+
+  const getVideoDetails = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(`/api/v1/videos/${videoId}`, {
@@ -53,21 +63,27 @@ const Watchpage = () => {
 
       if (response) {
         const video = response.data.data;
-        console.log("Fetched video:", video); // Debug log
+        console.log("Fetched video:", video);
         dispatch(setVideo(video));
         dispatch(setLikes(video?.likesCount));
       }
+
+      if(response.status === 404){
+        setError("Video Not Found")
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setError(error.message ?? "Error while fetching video");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [videoId, dispatch]);
+
 
   useEffect(() => {
-    console.log("videoId changed:", videoId); // Debug log
+    console.log("videoId changed:", videoId);
     if (videoId) {
-      dispatch(setVideo(null)); // Reset video state
+      dispatch(setVideo(null)); 
       getVideoDetails();
     }
   }, [videoId]);
@@ -76,57 +92,42 @@ const Watchpage = () => {
     dispatch(toggleMenuFalse());
   }, [dispatch]);
 
+
+  if(error){
+    return <ErrorPage err={error}/>
+  }
+
   const VideocreatedAGo = getTimeElapsed(Video?.createdAt);
 
-  console.log(Video)
   return (
-    <div className="text-white h-screen flex justify-between">
+    <div className="text-white ml-5  flex justify-between">
       <div className="w-[67%] px-2 py-3">
         <div className="px-2">
           {isLoading ? (
-            <p>Loading...</p>
+            <Loader />
           ) : (
-            Video && <VideoPlayer videoFile={Video?.url} />
+            Video && <VideoPlayer url={Video?.url} />
           )}
         </div>
 
-        {Video && (
-          <div className="border ml-1 px-4 py-2 mt-2 rounded-md bg-black bg-opacity-5">
+        {/* {Video && ( */}
+          <div className="ml-1 px-1 py-1 mt-1 rounded-md">
             <div className="flex justify-between">
               <div className="w-[90%]">
-                <h1 className="text-[1.3rem] font-semibold">{Video?.title}</h1>
-                <p>{Video?.views} Views · {VideocreatedAGo}</p>
-              </div>
-              <div className="py-2 flex h-[30%]">
-                <NavLink
-                  onClick={toggleVideoLike}
-                  className={`px-4 py-2 border border-gray-400 flex items-center hover:bg-gray-900 ${
-                    Video?.isLiked ? "text-blue-500" : ""
-                  }`}
-                >
-                  <p className="mr-2">{Likes}</p>
-                  <FaThumbsUp />
-                </NavLink>
-
-                <button className="px-4 py-2 border border-gray-400 ml-2 flex items-center hover:bg-gray-900">
-                  <FaThumbsDown />
-                  <p className="ml-2"></p>
-                </button>
-                <button className="px-4 py-2 border border-gray-400 ml-2 flex items-center hover:bg-gray-900">
-                  <FaSave />
-                  save
-                </button>
+                <h1 className="text-[1.2rem] font-medium">{Video?.title}</h1>
               </div>
             </div>
-            <div className="flex justify-between mt-1">
-              <div className="flex items-center">
+            <div className="flex justify-between ">
+
+              {/* Channel details */}
+              <div className="flex items-center mt-1">
                 <Link to={`/channel/${Video?.owner?.username}`}>
                   <img
-                    className="w-10 h-10 rounded-full"
+                    className="w-8 h-8 rounded-full"
                     src={`${Video?.owner?.avatar}`}
                   />
                 </Link>
-                <div className="ml-3">
+                <div className="ml-3 font-mono text-[0.8rem]">
                   <Link
                     to={`/channel/${Video?.owner?.username}`}
                     className="font-semibold"
@@ -137,37 +138,56 @@ const Watchpage = () => {
                     {Video?.subscribersCount} subscribers
                   </p>
                 </div>
+                {/* Subscribe button */}
+                <button
+                  onClick={handleSubscribeToggle}
+                  className=" ml-3 py-1 flex items-center border border-gray-700 hover:bg-gray-800 px-1 rounded-md"
+                >
+                  <p className="mr-3 font-semibold">
+                    {Video?.isSubscribed ? "subscribed" : "subscribe"}
+                  </p>
+                  <FaBell />
+                </button>
               </div>
-              <button
-                onClick={handleSubscribeToggle}
-                className="flex items-center bg-gray-100 hover:bg-gray-300 text-black px-2 rounded-full"
-              >
-                <p className="mr-3 font-semibold">
-                  {Video?.isSubscribed ? "subscribed" : "subscribe"}
-                </p>
-                <FaBell />
-              </button>
+
+              {/* Like and save button */}
+              <div className=" flex h-[30%]">
+                <NavLink
+                  onClick={toggleVideoLike}
+                  className={`rounded-md px-4  border border-gray-400 flex items-center hover:bg-gray-800 ${Video?.isLiked ? "text-blue-500" : ""
+                    }`}
+                >
+                  <p className="mr-2">{Likes}</p>
+                  <FaThumbsUp />
+                </NavLink>
+
+                <button className="px-4 border border-gray-400 ml-2 flex items-center hover:bg-gray-800 rounded-md">
+                  <FaThumbsDown />
+                  <p className="ml-2"></p>
+                </button>
+                <button className="px-4 py-1 border border-gray-400 ml-2 flex items-center hover:bg-gray-800 rounded-md">
+                  <FaSave />
+                  save
+                </button>
+              </div>
+
             </div>
-            <div
-              className={`mt-4 ${
-                isDescription ? "h-full" : "h-[17vh]"
-              } border border-b-0 border-l-0 border-r-0 py-2 px-3 overflow-hidden`}
-            >
-              <button
-                onClick={() => {
-                  dispatch(showDescription());
-                }}
-                className="ml-2 border px-3"
-              >
-                {isDescription ? "Hide" : "Show"}
-              </button>
-              <p className="h-[10]">
-                {Video?.description ? Video?.description : "No description"}
-              </p>
+
+            {/* Description */}
+            <div className="bg-[#3b444b] mt-3 rounded-md p-3">
+              <Description
+                views={Video?.views}
+                createdAt={VideocreatedAGo}
+                description={Video?.description}
+              />
             </div>
+
           </div>
-        )}
-        <CommentPage />
+        {/* )} */}
+        <Suspense fallback={<Loader />}>
+          <LazyCommentPage />
+        </Suspense>
+
       </div>
       <div className="w-[40%]">
         {/* ( // need more works on this listing page with backend and FE too)
