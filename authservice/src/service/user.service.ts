@@ -2,9 +2,10 @@ import type { ContextType, CookieOptions } from "diesel-core";
 import { UserRepository } from "../repository/user.repository";
 import { type UserDocument } from "../model/user.model";
 import type { Types } from "mongoose";
-import { publishMessage } from "./rabbitMQ/producer";
 import { CleanUpResource } from "../utils/cleanup";
 import { uploadOnCloudinary } from "../utils/cloduinary";
+import {sendToEmailQueue } from "./rabbitMQ/producer";
+import { redis } from "./redis";
 
 export class UserService {
     private userRepository: UserRepository;
@@ -20,6 +21,9 @@ export class UserService {
         return UserService.instance;
     }
 
+    generateOTP = (): string => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    };
 
     generateAccessAndRefreshToken = async (userId: Types.ObjectId) => {
         try {
@@ -85,14 +89,25 @@ export class UserService {
                 return ctx.json({ status: 500, message: "User creation failed" }, 500);
             }
 
-            publishMessage({
-                userId: user._id,
-                avatar: avatar || null,
-                coverImage: coverImage || null,
-                action: "UPLOAD_IMAGES",
-            });
+            const otp = this.generateOTP()
+            await redis.setex(`otp:${email}`, 300, otp)
 
-            return ctx.json({ message: "User created successfully", user }, 201);
+            sendToEmailQueue({
+                // userId: user._id,
+                email: email,
+                // fullname: user.fullname,
+                otp,
+                action: "SIGNUP",
+            })
+
+            // publishMessage({
+            //     userId: user._id,
+            //     avatar: avatar || null,
+            //     coverImage: coverImage || null,
+            //     action: "UPLOAD_IMAGES",
+            // });
+
+            return ctx.json({ message: "User created. OTP sent to email." }, 201);
         } catch (error) {
             console.log("error while signing up", error)
             if (ctx.req.files) {
@@ -118,6 +133,10 @@ export class UserService {
             if (!user) {
                 console.log("user not found");
                 return ctx.json({ status: 404, message: "User not found" }, 404);
+            }
+
+            if (!user.isVerified) {
+                return ctx.json({ message: "Account not verified. Please check your email." },403);
             }
 
             const isPasswordCorrect = await user.isPasswordCorrect(password);
@@ -151,30 +170,58 @@ export class UserService {
         }
     };
 
+    /**
+     * 🔹 User Logout Service
+     */
+    Logout = async (ctx: ContextType) => {
+        try {
+            const authUser: any = ctx.get('user')
+
+            await this.userRepository.UpdateUser(authUser?._id, { refreshToken: undefined })
+
+            const cookieOptions: CookieOptions = {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+            };
+
+            ctx.setCookie("accessToken", "", { ...cookieOptions, expires: new Date(0) });
+            ctx.setCookie("refreshToken", "", { ...cookieOptions, expires: new Date(0) });
+
+            return ctx.json({ message: "User logged out successfully" }, 200);
+        } catch (error) {
+            console.log("error while logging out", error);
+            return ctx.json({ status: 500, message: "Something went wrong while logging out" }, 500);
+        }
+    };
+
+    /**
+     * 🔹 User Update Service
+     */
     Update = async (ctx: ContextType) => {
         try {
 
             const authUser: any = ctx.get('user')
             const { username, fullname } = await ctx.body
             const { avatar, coverImage } = ctx.req.files
-            console.log("avatara file in service",avatar)
+            console.log("avatara file in service", avatar)
             const updatedData: Record<string, string> = {}
 
             if (username) updatedData.username = username
             if (fullname) updatedData.fullname = fullname
-           
+
             const user: UserDocument | null = await this.userRepository.FindById(authUser?._id);
             if (!user) {
                 console.log("User not found");
                 return ctx.json({ status: 404, message: "User not found" }, 404);
             }
 
-            if(avatar || coverImage){
+            if (avatar || coverImage) {
                 console.log('is avatar and coverimage')
                 const avatarResponse = await uploadOnCloudinary(avatar)
                 const coverImageResponse = await uploadOnCloudinary(coverImage)
-                console.log('avatar res',avatarResponse)
-                if(avatarResponse || coverImageResponse){
+                console.log('avatar res', avatarResponse)
+                if (avatarResponse || coverImageResponse) {
                     updatedData.avatar = avatarResponse?.secure_url
                     updatedData.coverImage = coverImageResponse?.secure_url
                 }
@@ -184,7 +231,7 @@ export class UserService {
 
             const updatedUser = await this.userRepository.FindById(user._id as Types.ObjectId);
 
-            return ctx.json({ message: "User updated successfully", user:updatedUser }, 200);
+            return ctx.json({ message: "User updated successfully", user: updatedUser }, 200);
         } catch (error) {
             console.log("Error while updating user", error);
             return ctx.json({ status: 500, message: "Something went wrong while updating user" }, 500);
@@ -194,5 +241,64 @@ export class UserService {
             }
         }
     }
+
+
+    /**
+     * 🔹 User Delete Service
+     */
+    Delete = async (ctx: ContextType) => {
+        try {
+            const authUser: any = ctx.get('user')
+
+            const user: UserDocument | null = await this.userRepository.FindById(authUser?._id);
+            if (!user) {
+                console.log("User not found");
+                return ctx.json({ status: 404, message: "User not found" }, 404);
+            }
+
+            await this.userRepository.UpdateUser(user._id as Types.ObjectId, { isActive: false })
+
+            return ctx.json({ message: "User deleted successfully" }, 200);
+        } catch (error) {
+            console.log("Error while deleting user", error);
+            return ctx.json({ status: 500, message: "Something went wrong while deleting user" }, 500);
+        }
+    }
+
+    /**
+     * 🔹 User Get Service
+     */
+    Get = async (ctx: ContextType) => {
+        try {
+            const authUser: any = ctx.get('user')
+
+            const user: UserDocument | null = await this.userRepository.FindById(authUser?._id);
+            if (!user) {
+                console.log("User not found");
+                return ctx.json({ status: 404, message: "User not found" }, 404);
+            }
+
+            return ctx.json({ message: "User fetched successfully", user }, 200);
+        } catch (error) {
+            console.log("Error while fetching user", error);
+            return ctx.json({ status: 500, message: "Something went wrong while fetching user" }, 500);
+        }
+    }
+
+    /**
+     * 🔹 Verify OTP Service
+     */
+    VerifyOTP = async (ctx: ContextType) => {
+        const { email, otp } = await ctx.body;
+
+        const storedOTP = await redis.get(`otp:${email}`);
+        if (!storedOTP || storedOTP !== otp) {
+            return ctx.json({ status: 400, message: "OTP expired or incorrect" }, 400);
+        }
+
+        await redis.del(`otp:${email}`);
+        return ctx.json({ message: "OTP verified successfully" }, 200);
+    };
+
 
 }

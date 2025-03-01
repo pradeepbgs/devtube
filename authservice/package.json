@@ -22,6 +22,7 @@
     "cloudinary": "^2.5.1",
     "diesel-core": "^1.0.20",
     "i": "^0.3.7",
+    "ioredis": "^5.5.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.0",
     "mongoose": "^8.10.0",
