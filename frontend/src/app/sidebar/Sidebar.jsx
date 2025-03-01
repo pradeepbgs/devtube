@@ -1,88 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  IoIosHome, 
-  IoIosHeart, 
-  IoMdTime, 
-  IoMdApps, 
-  IoIosPeople, 
-  IoIosHelpCircle, 
-  IoIosSettings 
+import React from 'react';
+import {
+  IoIosHome,
+  IoIosHeart,
+  IoMdTime,
+  IoMdApps,
+  IoIosPeople,
+  IoIosHelpCircle,
+  IoIosSettings
 } from 'react-icons/io';
 import { useSelector } from 'react-redux';
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { NavLink } from 'react-router-dom';
 
-import { NavLink , Link} from 'react-router-dom';
-
-const Sidebar = () => {
- 
-  const items = [
-    {
-      name: 'Home',
-      link: '/',
-      icon: <IoIosHome />,
-    },
-    {
-      name: 'Liked Videos',
-      link: '/liked-videos',
-      icon: <IoIosHeart />,
-    },
-    {
-      name: 'History',
-      link: '/history',
-      icon: <IoMdTime />,
-    },
-    {
-      name: 'My Content',
-      link: '/my-content',
-      icon: <IoMdApps />,
-    },
-    {
-      name: 'Collections',
-      link: '/collections',
-      icon: <IoMdApps />,
-    },
-    {
-      name: 'Subscribers',
-      link: '/subscribers',
-      icon: <IoIosPeople />,
-    },
-  ];
-
-  const isMenuOpen = useSelector(state => state.toggle.isMenuOpen)
-
-  if(!isMenuOpen){
-    return null
-  }
+const SidebarComponent = () => {
+  const isMenuOpen = useSelector(state => state.toggle.isMenuOpen);
 
   return (
-  
-    <div className={`'bg-black text-white h-full  flex-col hidden md:flex border border-y-0 border-l-0 transorm transition-all duration-400'`}>
-      <ul className='flex-grow px-2 py-3'>
-        {items.map((item, index) => (
-          <NavLink 
-          className={({isActive}) => `${isActive? "text-purple-400" : "text-gray-200"}`}
-          to={item.link} key={index}>
-          <li
-            className='py-2 px-5 hover:bg-purple-400 
-             transform transition-all duration-100
-            hover:text-black w-[100%] mb-4 cursor-pointer 
-            flex items-center border rounded-sm'
-          >
-            {item.icon && <span className='mr-2'>{item.icon}</span>}
-            {item.name}
-          </li>
-          </NavLink>
-        ))}
-      </ul>
-      <ul className='px-2'>
-        <li className='py-2 px-4 hover:bg-purple-400 hover:text-black  cursor-pointer flex items-center w-[15vw] mb-4 border'>
-          <span className='mr-2'><IoIosHelpCircle /></span> Support
-        </li>
-        <li className='py-2 px-4 hover:bg-purple-400 hover:text-black  cursor-pointer flex items-center w-[15vw] mb-4 border'>
-          <span className='mr-2'><IoIosSettings /></span> Setting
-        </li>
-      </ul>
-    </div>
+    <Sidebar
+      width="220px"
+      backgroundColor="gray-1000"
+      rootStyles={{
+        height: "fit",
+        color: "white",
+        borderRight: '1px solid gray',
+        transition: "all 0.2s ease-in-out",
+        transform: isMenuOpen ? "translateX(0)" : "translateX(-100%)",
+        transition: "transform 0.2s ease-in-out, opacity 0.2s ease-in-out",
+        transform: isMenuOpen ? "translateX(0)" : "translateX(-100%)",
+        opacity: isMenuOpen ? 1 : 0,
+        visibility: isMenuOpen ? "visible" : "hidden",
+        position: isMenuOpen ? "" : "fixed",
+      }}
+    >
+      <Menu
+        menuItemStyles={{
+          button: ({ active }) => ({
+            color: "white",
+            [`&.active`]: {
+              backgroundColor: '#9C27B0',
+              color: 'gray-200',
+            },
+            marginBottom: "15px",
+            padding: "10px",
+            fontSize:"0.9rem",
+            border: "1px solid gray",
+            borderRadius: "5px",
+            transition: "all 0.1s ease-in-out",
+            transform: isMenuOpen ? "translateX(0)" : "translateX(-10px)",
+            opacity: isMenuOpen ? 1 : 0,
+            "&:hover": {
+              backgroundColor: "#7B1FA2",
+            },
+            marginRight:'10px',
+            marginLeft:'10px',
+            marginTop:"10px"
+          }),
+        }}
+      >
+        <MenuItem icon={<IoIosHome />} component={<NavLink to="/" />}> Home </MenuItem>
+        <MenuItem icon={<IoIosHeart />} component={<NavLink to="/liked-videos" />}> Liked Videos </MenuItem>
+        <MenuItem icon={<IoMdTime />}> History </MenuItem>
+        <MenuItem icon={<IoMdApps />}> My Content </MenuItem>
+        <MenuItem icon={<IoMdApps />}> Collections </MenuItem>
+        <MenuItem icon={<IoIosPeople />}> Subscribers </MenuItem>
+        <MenuItem icon={<IoIosHelpCircle />}> Support </MenuItem>
+        <MenuItem icon={<IoIosSettings />}> Settings </MenuItem>
+      </Menu>
+    </Sidebar>
   );
 };
 
-export default Sidebar;
+export default React.memo(SidebarComponent);
