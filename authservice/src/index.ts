@@ -6,7 +6,7 @@ import { UserRepository } from "./repository/user.repository";
 import { securityMiddleware } from "diesel-core/security";
 import { cors } from "diesel-core/cors";
 import { fileSaveMiddleware } from "./middleware/saveFile";
-import { StartConsuming } from "./service/rabbitMQ/consumer";
+import {StartRabbitMQ } from "./service/rabbitMQ/consumer";
 import { verifyJwt } from "./middleware/auth.middleware";
 
 const app = new Diesel();
@@ -20,6 +20,7 @@ const userRepository = UserRepository.getInstance()
 const userService = UserService.getInstance(userRepository)
 const userController = UserController.getInstance(userService)
 
+// cors
 app.use(
     cors({
         origin: ["http://localhost:8080"],
@@ -27,22 +28,19 @@ app.use(
         allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
+
+// Middlewares
 app.use(securityMiddleware);
+app.use("/api/v1/user/update", fileSaveMiddleware)
+
 
 app
     .setupFilter()
-    .routeMatcher("/api/v1/user/register", "/api/v1/user/login")
+    .routeMatcher("/api/v1/user/register", "/api/v1/user/login", "/api/v1/user/verify-otp")
     .permitAll()
     .authenticate([verifyJwt])
 
-await connectDB()
-    .then((db) => log("info", `MongoDB connected`, { host: db.connection.host }))
-    .then(() => StartConsuming())
-    .catch((error) => {
-        log("error", "MongoDB Connection Failed", { error: error.message })
-        process.exit(1);
-    });
-
+// Hooks setup
 app.addHooks("onRequest", async (req: Request, url: URL) => {
     const start = Date.now();
 
@@ -84,11 +82,32 @@ app.addHooks("routeNotFound", (ctx: ContextType) => {
     return ctx.json({ message: "Route not found" }, 404);
 })
 
+
+// Routes setup
 app.get("/", (ctx) => {
     return ctx.json({message:"Welcome to auth service"})
 })
 app.post("/api/v1/user/login", userController.LoginUser);
-app.post("/api/v1/user/register", fileSaveMiddleware, userController.RegisterUser);
-app.put("/api/v1/user/update", fileSaveMiddleware, userController.UpdateUser);
+app.post("/api/v1/user/register", userController.RegisterUser);
+app.put("/api/v1/user/update", userController.UpdateUser);
+app.post("/api/v1/user/verify-otp",userController.VeifyOTP)
+app.get("/api/v1/user", userController.GetUser)
 
-app.listen(port,"0.0.0.0",  () => log("info", `Server started on port ${port}`));
+
+await connectDB()
+    .then((db) => log("info", `MongoDB connected`, { host: db.connection.host }))
+    .then(() => StartRabbitMQ())
+    .then(() => app.listen(port,"0.0.0.0",  () => log("info", `Server started on port ${port}`)))
+    .catch((error) => {
+        log("error", "MongoDB Connection Failed", { error: error.message })
+        process.exit(1);
+    });
+
+
+
+function shutDown(){
+    app.close();
+    process.exit(0);
+}
+process.on('SIGINT', shutDown);
+process.on('SIGTERM', shutDown);

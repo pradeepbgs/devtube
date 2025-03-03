@@ -18,7 +18,13 @@ export class UserRepository{
     }
 
     async FindById(userId:Types.ObjectId){
-        return await User.findById(userId).select("-password -refreshToken");
+        return await User
+        .findById(userId)
+        .select("-password -refreshToken");
+    }
+
+    async FindByEmail(email:string){
+        return await User.findOne({email:email})
     }
 
     async CreateUser(userData:any){
