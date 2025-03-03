@@ -4,3 +4,4 @@ root.cookie.pkfile
 /*node_modules
 /*.venv
 zpkfile
+docker-compose.yml

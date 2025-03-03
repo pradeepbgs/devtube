@@ -31,6 +31,7 @@ def callback(ch, method, properties, body):
         recipient_email = data['email']
         otp = data['otp']
         action = data['action']
+        sender = os.getenv()
         email_subject, email_body = generate_email_content(action, otp)
         
         send_mail(
@@ -40,6 +41,7 @@ def callback(ch, method, properties, body):
             recipient_list=[recipient_email],
             fail_silently=False,
         )
+        print(f"✉️ Email sent to {recipient_email}")
         ch.basic_ack(delivery_tag=method.delivery_tag)
     except Exception as e:
         print(e)

@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+       - "5672:5672"
+       - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  emailservice:
+    build: ./email-service
+    ports:
+      - "8000:8000"
+    environment:
+      - EMAIL_PASS=
+      - EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_PORT=587
+      - EMAIL_USE_TLS=True
+      - EMAIL_HOST_USER=youremail@gmail.com
+
+  authservice:
+    build: ./authservice
+    ports:
+      - "3000:3000"
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+      - MONGODB_URL= mongodb atlas url
+      - ACCESS_TOKEN_SECRET= your_secter
+      - ACCESS_TOKEN_EXPIRY=10d
+      - REFRESH_TOKEN_SECRET=secret
+      - REFRESH_TOKEN_EXPIRY=10d
+      - CLOUDINARY_CLOUD_NAME=
+      - CLOUDINARY_API_KEY=
+      - CLOUDINARY_API_SECRET=
+    depends_on:
+      - rabbitmq
+
+  videouploadservice:
+    build: ./videoUploadService
+    ports:
+      - "3001:3001"
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+      - MONGODB_URL=
+      - DATABASE_NAME=devTube
+      - CLOUDINARY_CLOUD_NAME=
+      - CLOUDINARY_API_KEY=
+      - CLOUDINARY_API_SECRET=
+      - ACCESS_TOKEN_SECRET=
+    depends_on:
+      - rabbitmq
+
+  devtube-node:
+    build: ./devtube-node
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - MONGODB_URL=
+      - ACCESS_TOKEN_SECRET=
+      - ACCESS_TOKEN_EXPIRY=10d
+      - REFRESH_TOKEN_SECRET=
+      - REFRESH_TOKEN_EXPIRY=10d
+      - CLOUDINARY_CLOUD_NAME=
+      - CLOUDINARY_API_KEY=
+      - CLOUDINARY_API_SECRET=
+    depends_on:
+      - rabbitmq
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx-api-gateway.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
