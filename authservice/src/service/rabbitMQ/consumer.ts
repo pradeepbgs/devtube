@@ -10,7 +10,7 @@ const QUEUE_NAME = process.env.QUEUE_NAME || "fileUploadQueue";
 
 const userRepository = UserRepository.getInstance();
 
-export const StartConsuming = async () => {
+export const StartRabbitMQ = async () => {
     try {
         const connection: Connection = await amqp.connect(RABBITMQ_URL);
         const channel: Channel = await connection.createChannel();

@@ -27,5 +27,13 @@ export class UserController {
     UpdateUser = async (ctx:ContextType) => {
       return await this.userService.Update(ctx);
     }
+    
+    VeifyOTP = async (ctx:ContextType) => {
+      return await this.userService.VerifyOTP(ctx);
+    }
+
+    GetUser = async (ctx:ContextType) => {
+      return await this.userService.Get(ctx);
+    }
   }
   

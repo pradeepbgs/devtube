@@ -4,7 +4,7 @@ import { type UserDocument } from "../model/user.model";
 import type { Types } from "mongoose";
 import { CleanUpResource } from "../utils/cleanup";
 import { uploadOnCloudinary } from "../utils/cloduinary";
-import {sendToEmailQueue } from "./rabbitMQ/producer";
+import { sendToEmailQueue } from "./rabbitMQ/producer";
 import { redis } from "./redis";
 
 export class UserService {
@@ -55,37 +55,39 @@ export class UserService {
     SignUp = async (ctx: ContextType) => {
         try {
             const { fullname, email, username, password } = await ctx.body;
-            const { avatar, coverImage } = ctx.req.files;
 
             if (!fullname || !email || !username || !password) {
                 console.log("all fields are required")
-                if (avatar || coverImage) {
-                    CleanUpResource(avatar, coverImage)
-                }
                 return ctx.json({ status: 400, message: "All fields are required" }, 400);
             }
 
             const existingUser: UserDocument | null = await this.userRepository.FindExistingUser(email, username);
-            if (existingUser) {
+
+            if (existingUser && existingUser.isVerified) {
                 console.log("user already exists with this username or email")
-                if (avatar || coverImage) {
-                    CleanUpResource(avatar, coverImage)
-                }
                 return ctx.json({ status: 409, message: "User already exists with this username or email" }, 409)
             }
 
-            const user: UserDocument = await this.userRepository.CreateUser({
-                fullname,
-                email,
-                password,
-                username: username.toLowerCase(),
-            });
+            let user: UserDocument;
+
+            if (existingUser && !existingUser.isVerified) {
+                user = this.userRepository.UpdateUser(existingUser._id as Types.ObjectId, {
+                    fullname,
+                    email,
+                    password,
+                    username: username.toLowerCase(),
+                });
+            } else {
+                user = await this.userRepository.CreateUser({
+                    fullname,
+                    email,
+                    password,
+                    username: username.toLowerCase(),
+                });
+            }
 
             if (!user) {
                 console.log("user creation failed")
-                if (avatar || coverImage) {
-                    CleanUpResource(avatar, coverImage)
-                }
                 return ctx.json({ status: 500, message: "User creation failed" }, 500);
             }
 
@@ -107,7 +109,7 @@ export class UserService {
             //     action: "UPLOAD_IMAGES",
             // });
 
-            return ctx.json({ message: "User created. OTP sent to email." }, 201);
+            return ctx.json({ message: "OTP sent to email." }, 201);
         } catch (error) {
             console.log("error while signing up", error)
             if (ctx.req.files) {
@@ -130,13 +132,13 @@ export class UserService {
             }
 
             const user: UserDocument | null = await this.userRepository.FindExistingUser(email, username);
-            if (!user) {
+            if (!user || !user.isVerified) {
                 console.log("user not found");
                 return ctx.json({ status: 404, message: "User not found" }, 404);
             }
 
             if (!user.isVerified) {
-                return ctx.json({ message: "Account not verified. Please check your email." },403);
+                return ctx.json({ message: "Account not verified. Please check your email." }, 403);
             }
 
             const isPasswordCorrect = await user.isPasswordCorrect(password);
@@ -211,7 +213,7 @@ export class UserService {
             if (fullname) updatedData.fullname = fullname
 
             const user: UserDocument | null = await this.userRepository.FindById(authUser?._id);
-            if (!user) {
+            if (!user || !user.isVerified) {
                 console.log("User not found");
                 return ctx.json({ status: 404, message: "User not found" }, 404);
             }
@@ -251,7 +253,7 @@ export class UserService {
             const authUser: any = ctx.get('user')
 
             const user: UserDocument | null = await this.userRepository.FindById(authUser?._id);
-            if (!user) {
+            if (!user || !user.isVerified) {
                 console.log("User not found");
                 return ctx.json({ status: 404, message: "User not found" }, 404);
             }
@@ -288,6 +290,7 @@ export class UserService {
     /**
      * 🔹 Verify OTP Service
      */
+
     VerifyOTP = async (ctx: ContextType) => {
         const { email, otp } = await ctx.body;
 
@@ -295,7 +298,16 @@ export class UserService {
         if (!storedOTP || storedOTP !== otp) {
             return ctx.json({ status: 400, message: "OTP expired or incorrect" }, 400);
         }
+        const user:UserDocument|null = await this.userRepository.FindByEmail(email)
+        
+        if (!user)
+            return ctx.json({ status: 404, message: "User not found" }, 404);
+        
+        if(user.isVerified)
+            return ctx.json({ status: 400, message: "User is already verified" }, 400)
 
+        await this.userRepository.UpdateUser(user._id as Types.ObjectId, { isVerified: true });
+        
         await redis.del(`otp:${email}`);
         return ctx.json({ message: "OTP verified successfully" }, 200);
     };

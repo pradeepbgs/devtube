@@ -12,7 +12,7 @@
   "URL": "http://localhost:3001/api/v1/user/register"
  },
  "response": {
-  "Body": "eyJtZXNzYWdlIjoiVXNlciBjcmVhdGVkLiBPVFAgc2VudCB0byBlbWFpbC4ifQ==",
+  "Body": "eyJzdGF0dXMiOjQwOSwibWVzc2FnZSI6IlVzZXIgYWxyZWFkeSBleGlzdHMgd2l0aCB0aGlzIHVzZXJuYW1lIG9yIGVtYWlsIn0=",
   "Headers": {
    "Access-Control-Allow-Credentials": [
     "false"
@@ -30,7 +30,7 @@
     "no-cache"
    ],
    "Content-Length": [
-    "46"
+    "74"
    ],
    "Content-Security-Policy": [
     "default-src 'self'"
@@ -39,7 +39,7 @@
     "application/json; charset=utf-8"
    ],
    "Date": [
-    "Sat, 01 Mar 2025 10:05:31 GMT"
+    "Mon, 03 Mar 2025 08:56:34 GMT"
    ],
    "X-Content-Type-Options": [
     "nosniff"
@@ -48,13 +48,10 @@
     "DENY"
    ]
   },
-  "Status": "201 Created"
+  "Status": "409 Conflict"
  }
 }
-w-Origin": [
-    "*"
-   ],
-   "Cache-Control": [
+Control": [
     "no-cache"
    ],
    "Connection": [
