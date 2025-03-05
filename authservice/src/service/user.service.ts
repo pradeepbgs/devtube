@@ -292,25 +292,112 @@ export class UserService {
      */
 
     VerifyOTP = async (ctx: ContextType) => {
-        const { email, otp } = await ctx.body;
+        try {
+            const { email, otp } = await ctx.body;
 
-        const storedOTP = await redis.get(`otp:${email}`);
-        if (!storedOTP || storedOTP !== otp) {
-            return ctx.json({ status: 400, message: "OTP expired or incorrect" }, 400);
+            const storedOTP = await redis.get(`otp:${email}`);
+            if (!storedOTP || storedOTP !== otp) {
+                return ctx.json({ status: 400, message: "OTP expired or incorrect" }, 400);
+            }
+            const user: UserDocument | null = await this.userRepository.FindByEmail(email)
+
+            if (!user)
+                return ctx.json({ status: 404, message: "User not found" }, 404);
+
+            if (user.isVerified)
+                return ctx.json({ status: 400, message: "User is already verified" }, 400)
+
+            await this.userRepository.UpdateUser(user._id as Types.ObjectId, { isVerified: true });
+
+            await redis.del(`otp:${email}`);
+            return ctx.json({ message: "OTP verified successfully" }, 200);
+        } catch (error) {
+            return ctx.json({ status: 500, message: "Something went wrong while verifying user OTP" }, 500);
         }
-        const user:UserDocument|null = await this.userRepository.FindByEmail(email)
-        
-        if (!user)
-            return ctx.json({ status: 404, message: "User not found" }, 404);
-        
-        if(user.isVerified)
-            return ctx.json({ status: 400, message: "User is already verified" }, 400)
-
-        await this.userRepository.UpdateUser(user._id as Types.ObjectId, { isVerified: true });
-        
-        await redis.del(`otp:${email}`);
-        return ctx.json({ message: "OTP verified successfully" }, 200);
     };
 
+    RequestPasswordReset = async (ctx: ContextType) => {
+        try {
+            const { email } = await ctx.body;
 
+            if (!email)
+                return ctx.json({ status: 400, message: "Email is required" }, 400);
+            
+            const user = await this.userRepository.FindByEmail(email)
+            if (!user)
+                return ctx.json({ status: 400, message: "User not found" }, 400);
+
+            const token = crypto.randomUUID();
+            await redis.setex(`reset:${token}`, 300, email);
+
+            const resetLink = process.env.AUTH_SERVICE_URI+`/reset-password?token=${token}`
+            sendToEmailQueue({
+                email,
+                resetLink,
+                action: "PASSWORD_RESET",
+            })
+            return ctx.json({ message: "Password reset link sent to email" }, 200);
+        } catch (error) {
+            console.error("Reset Password Error:", error);
+            return ctx.json({ status: 500, message: "Something went wrong while resetting password" }, 500)
+        }
+    }
+
+    ServeResetPasswordForm = async (ctx: ContextType) => {
+        try {
+            // const token = ctx.query.token?.trim();
+            // if (!token)
+            //     return ctx.json({ status: 400, message: "Token is required" }, 400);
+
+            // const email = await redis.get(`reset:${token}`);
+            // if (!email) {
+            //     return ctx.json({ status: 400, message: "Token is expired or invalid" }, 400);
+            // }
+
+            // ctx.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+            // ctx.setHeader("Content-Type", "text/html");
+            const file = await Bun.file("./src/views/reset-password.html")
+            return new Response(file, {
+                headers: { "Content-Type": "text/html; charset=utf-8" },
+            });
+            // return ctx.file('./src/views/reset-password.html')
+
+        } catch (error) {
+            console.error("Reset Password Error:", error);
+            return ctx.json({ status: 500, message: "Something went wrong while resetting password" }, 500)
+        }
+    }
+
+    ResetPassword = async (ctx: ContextType) => {
+        const body = await ctx.body
+        console.log(body)
+        if(!body)
+            return ctx.json({ status: 400, message: "Body is required" }, 400);
+        try {
+            // const { token, newPassword } = body
+            // if (!token || !newPassword)
+            //     return ctx.json({ status: 400, message: "Token and new password required" }, 400);
+
+            // const email = await redis.get(`reset:${token}`);
+            // if (!email)
+            //     return ctx.json({ status: 400, message: "Token is expired or invalid" }, 400);
+
+            // const user = await this.userRepository.FindByEmail(email);
+            // if (!user)
+            //     return ctx.json({ status: 400, message: "User not found" }, 400);
+
+            // user.password = newPassword
+            // await user.save();
+            // await redis.del(`${token}`);
+            const file = await Bun.file('./src/views/password-reset-successful.html')
+            return new Response(file, {
+                headers: { "Content-Type": "text/html; charset=utf-8" },
+            });
+            // return ctx.json({ status: 200, message: "Password reset successfully" });
+
+        } catch (error) {
+            console.error("Reset Password Error:", error);
+            return ctx.json({ status: 500, message: "Something went wrong while resetting password" }, 500)
+        }
+    }
 }
