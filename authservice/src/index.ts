@@ -1,8 +1,5 @@
 import { Diesel, type ContextType } from "diesel-core";
 import connectDB from "./db/connection";
-import { UserController } from "./controller/user.controller";
-import { UserService } from "./service/user.service";
-import { UserRepository } from "./repository/user.repository";
 import { securityMiddleware } from "diesel-core/security";
 import { cors } from "diesel-core/cors";
 import { fileSaveMiddleware } from "./middleware/saveFile";
@@ -16,14 +13,10 @@ const log = (level: string, message: string, meta?: object) => {
     console.log('\n' + JSON.stringify({ level, message, timestamp: new Date().toISOString(), ...meta }) + '\n');
 };
 
-const userRepository = UserRepository.getInstance()
-const userService = UserService.getInstance(userRepository)
-const userController = UserController.getInstance(userService)
-
 // cors
 app.use(
     cors({
-        origin: ["http://localhost:8080"],
+        origin: ["http://localhost:8080","http://localhost:3001"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })
@@ -36,7 +29,12 @@ app.use("/api/v1/user/update", fileSaveMiddleware)
 
 app
     .setupFilter()
-    .routeMatcher("/api/v1/user/register", "/api/v1/user/login", "/api/v1/user/verify-otp")
+    .routeMatcher(
+        "/api/v1/user/register", 
+        "/api/v1/user/login", 
+        "/api/v1/user/verify-otp",
+        "/api/v1/user/reset-password",
+    )
     .permitAll()
     .authenticate([verifyJwt])
 
@@ -87,11 +85,11 @@ app.addHooks("routeNotFound", (ctx: ContextType) => {
 app.get("/", (ctx) => {
     return ctx.json({message:"Welcome to auth service"})
 })
-app.post("/api/v1/user/login", userController.LoginUser);
-app.post("/api/v1/user/register", userController.RegisterUser);
-app.put("/api/v1/user/update", userController.UpdateUser);
-app.post("/api/v1/user/verify-otp",userController.VeifyOTP)
-app.get("/api/v1/user", userController.GetUser)
+
+import userRoute from './routes/route'
+app.route("/api/v1/user",userRoute)
+
+
 
 
 await connectDB()

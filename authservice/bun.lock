@@ -10,7 +10,7 @@
         "amqplib": "^0.10.5",
         "bcrypt": "^5.1.1",
         "cloudinary": "^2.5.1",
-        "diesel-core": "^1.0.20",
+        "diesel-core": "^1.0.22",
         "i": "^0.3.7",
         "ioredis": "^5.5.0",
         "jsonwebtoken": "^9.0.2",
@@ -99,7 +99,7 @@
 
     "detect-libc": ["detect-libc@2.0.3", "", {}, "sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw=="],
 
-    "diesel-core": ["diesel-core@1.0.20", "", { "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-uKG0EQlY2uVpuPaDkWpI0F+HFCvrF4IKNc/XPNQ91Y09Yw8/wgxLkoQhfSXwQKa1cHQ4YvSt1/F/ZTDGdobPXA=="],
+    "diesel-core": ["diesel-core@1.0.22", "", { "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-rPPsIlKJo3bw4ythddqrtvrbce36Niescn/3QwmHAQ90Co41pI6vtRc00KRe5fIbe6+T2H2EZSA6+5+KGOpjWg=="],
 
     "ecdsa-sig-formatter": ["ecdsa-sig-formatter@1.0.11", "", { "dependencies": { "safe-buffer": "^5.0.1" } }, "sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ=="],
 

@@ -35,5 +35,15 @@ export class UserController {
     GetUser = async (ctx:ContextType) => {
       return await this.userService.Get(ctx);
     }
+
+    ServeResetPasswordForm = async(ctx:ContextType) => {
+      return await this.userService.ServeResetPasswordForm(ctx)
+    }
+    RequestPasswordReset = async(ctx:ContextType) => {
+      return await this.userService.RequestPasswordReset(ctx)
+    }
+    ResetPassword = async(ctx:ContextType) => {
+      return await this.userService.ResetPassword(ctx)
+    }
   }
   

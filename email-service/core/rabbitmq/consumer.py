@@ -1,6 +1,6 @@
 import pika
 import json
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 import os
 import threading
 
@@ -31,55 +31,64 @@ def callback(ch, method, properties, body):
         recipient_email = data['email']
         otp = data['otp']
         action = data['action']
-        sender = os.getenv()
-        email_subject, email_body = generate_email_content(action, otp)
+        sender = os.getenv('EMAIL_HOST_USER')
+        email_subject, html_message = generate_email_content(action, otp,recipient_email)
         
-        send_mail(
+        email =EmailMultiAlternatives(
             subject=email_subject,
-            message=email_body,
-            from_email=os.getenv('EMAIL_HOST_USER'),
-            recipient_list=[recipient_email],
-            fail_silently=False,
+            body="This is an HTML email. If you're seeing this, your email client does not support HTML.",
+            from_email=sender,
+            to=[recipient_email]
         )
-        print(f"✉️ Email sent to {recipient_email}")
+        email.attach_alternative(html_message, "text/html")
+        email.send()
+        print(f"✉️ Email sent to {recipient_email} for {action}")
         ch.basic_ack(delivery_tag=method.delivery_tag)
     except Exception as e:
         print(e)
 
 
-def generate_email_content(action, otp):
-    """Generate subject and message based on action type."""
+def generate_email_content(action, otp, recipient_email):
+    """Generate subject and HTML content based on action type."""
     if action == "SIGNUP":
         subject = "🔐 Verify Your Email - Signup OTP"
-        message = f"""
-        Welcome to Our Platform! 🎉
-
-        Your OTP for email verification is: **{otp}**
-
-        This OTP is valid for **5 minutes**. If you did not request this, please ignore.
-
-        Best Regards,  
-        The DevTeam 🚀
+        html_message = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; text-align: center;">
+            <h2 style="color: #333;">Welcome to DevTube! 🎉</h2>
+            <p>Your OTP for email verification is:</p>
+            <h3 style="color: #007bff;">{otp}</h3>
+            <p>This OTP is valid for <strong>5 minutes</strong>. If you did not request this, please ignore.</p>
+            <br>
+            <p>Best Regards,<br><strong>The DevTube Team 🚀</strong></p>
+        </body>
+        </html>
         """
+    
     elif action == "PASSWORD_RESET":
+        reset_link = f"https://your-auth-service.com/reset-password?email={recipient_email}&otp={otp}"
         subject = "🔑 Reset Your Password"
-        message = f"""
-        We received a request to reset your password.  
-
-        Your OTP for password reset is: **{otp}**  
-
-        This OTP will expire in **5 minutes**. If you did not request this, ignore this email.
-
-        Need help? Contact our support.  
-
-        Regards,  
-        The DevTeam
+        html_message = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; text-align: center;">
+            <h2 style="color: #333;">Password Reset Request</h2>
+            <p>Click the button below to reset your password:</p>
+            <a href="{reset_link}" 
+               style="display: inline-block; background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 10px;">
+               Reset Password
+            </a>
+            <p>If you didn't request this, please ignore this email.</p>
+            <br>
+            <p>Regards,<br><strong>The DevTube Team 🚀</strong></p>
+        </body>
+        </html>
         """
+
     else:
         subject = "🔔 Notification"
-        message = f"Here is your requested OTP: {otp}."
+        html_message = f"<p>Here is your OTP: <strong>{otp}</strong>.</p>"
 
-    return subject, message
+    return subject, html_message
 
 def start_consumer_thread():
     consumer_thread = threading.Thread(target=consume_rabbitmq)
