@@ -17,5 +17,8 @@ router.get("/user", userController.GetUser)
 router.post("/reset-password", userController.ResetPassword)
 router.get("/reset-password", userController.ServeResetPasswordForm)
 router.post("/request-password-reset", userController.RequestPasswordReset)
+router.post("/request-verification-otp",userController.requestVerificationOtp)
+router.post("/verify-otp", userController.verifyOtpAndActivateUser)
+
 
 export default router

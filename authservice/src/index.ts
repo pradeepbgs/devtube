@@ -34,6 +34,9 @@ app
         "/api/v1/user/login", 
         "/api/v1/user/verify-otp",
         "/api/v1/user/reset-password",
+        "/api/v1/user/request-password-reset",
+        "/api/v1/user/request-verification-otp",
+        "/api/v1/user/verify-otp"
     )
     .permitAll()
     .authenticate([verifyJwt])

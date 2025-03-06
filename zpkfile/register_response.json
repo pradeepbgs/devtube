@@ -1,18 +1,15 @@
 {
  "request": {
   "Body": {
-   "email": "kumarpradeepbgs@gmail.com",
-   "fullname": "pradeep kumar",
-   "password": "exvillager",
-   "username": "cityofdeadpeople"
+   "email": "kumarpradeepbgs@gmail.com"
   },
   "Headers": {
    "Method": "POST"
   },
-  "URL": "http://localhost:3001/api/v1/user/register"
+  "URL": "http://localhost:3001/api/v1/user/request-verification-otp"
  },
  "response": {
-  "Body": "eyJtZXNzYWdlIjoiT1RQIHNlbnQgdG8gZW1haWwuIn0=",
+  "Body": "eyJzdGF0dXMiOjIwMCwibWVzc2FnZSI6Ik9UUCBzZW50IHN1Y2Nlc3NmdWxseSJ9",
   "Headers": {
    "Access-Control-Allow-Credentials": [
     "false"
@@ -30,7 +27,7 @@
     "no-cache"
    ],
    "Content-Length": [
-    "32"
+    "48"
    ],
    "Content-Security-Policy": [
     "default-src 'self'"
@@ -39,12 +36,19 @@
     "application/json; charset=utf-8"
    ],
    "Date": [
-    "Wed, 05 Mar 2025 06:35:39 GMT"
+    "Thu, 06 Mar 2025 05:31:18 GMT"
    ],
    "X-Content-Type-Options": [
     "nosniff"
    ],
    "X-Frame-Options": [
+    "DENY"
+   ]
+  },
+  "Status": "200 OK"
+ }
+}
+-Options": [
     "DENY"
    ]
   },
