@@ -23,17 +23,17 @@ def consume_rabbitmq():
 def callback(ch, method, properties, body):
     try:
         data = json.loads(body)
-        if 'email' not in data or 'otp' not in data or 'action' not in data:
+        if 'email' not in data or 'action' not in data:
             print("⚠ Missing required fields in message")
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
         
         recipient_email = data['email']
-        otp = data['otp']
+        otp = data.get('otp')
         action = data['action']
         sender = os.getenv('EMAIL_HOST_USER')
-        email_subject, html_message = generate_email_content(action, otp,recipient_email)
-        
+        reset_link = data.get('resetLink')
+        email_subject, html_message = generate_email_content(action, otp,recipient_email, reset_link)
         email =EmailMultiAlternatives(
             subject=email_subject,
             body="This is an HTML email. If you're seeing this, your email client does not support HTML.",
@@ -48,9 +48,11 @@ def callback(ch, method, properties, body):
         print(e)
 
 
-def generate_email_content(action, otp, recipient_email):
+def generate_email_content(action, otp=None, recipient_email=None, reset_link=None):
     """Generate subject and HTML content based on action type."""
     if action == "SIGNUP":
+        if not otp:
+            raise ValueError("OTP is required for SIGNUP action")
         subject = "🔐 Verify Your Email - Signup OTP"
         html_message = f"""
         <html>
@@ -64,9 +66,27 @@ def generate_email_content(action, otp, recipient_email):
         </body>
         </html>
         """
-    
+
+    elif action == "VERIFICATION":
+        if not otp:
+            raise ValueError("OTP is required for VERIFICATION action")
+        subject = "🎉 Account Verification Email!"
+        html_message = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; text-align: center;">
+            <h2 style="color: #333;">Welcome to DevTube! 🎉</h2>
+            <p>Your OTP for account verification is:</p>
+            <h3 style="color: #007bff;">{otp}</h3>
+            <p>This OTP is valid for <strong>5 minutes</strong>. If you did not request this, please ignore.</p>
+            <br>
+            <p>Best Regards,<br><strong>The DevTube Team 🚀</strong></p>
+        </body>
+        </html>
+        """
+
     elif action == "PASSWORD_RESET":
-        reset_link = f"https://your-auth-service.com/reset-password?email={recipient_email}&otp={otp}"
+        if not reset_link:
+            raise ValueError("Reset link is required for PASSWORD_RESET action")
         subject = "🔑 Reset Your Password"
         html_message = f"""
         <html>
@@ -83,12 +103,10 @@ def generate_email_content(action, otp, recipient_email):
         </body>
         </html>
         """
-
     else:
-        subject = "🔔 Notification"
-        html_message = f"<p>Here is your OTP: <strong>{otp}</strong>.</p>"
-
+        raise ValueError("Invalid action type")
     return subject, html_message
+
 
 def start_consumer_thread():
     consumer_thread = threading.Thread(target=consume_rabbitmq)
