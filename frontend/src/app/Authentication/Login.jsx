@@ -4,6 +4,7 @@ import { useState } from "react";
 import React from "react";
 import { login } from '../../utils/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import { baseAuthUrl } from '../../utils/baseUrl';
 
 const Login = () => {
   const [error, setError] = useState('');
@@ -20,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "/api/v1/users/login",
+        `${baseAuthUrl}/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -38,7 +39,7 @@ const Login = () => {
     setIsLoading(true)
     e.preventDefault();
     try {
-      await axios.post("/api/v1/users/request-password-reset ", { email });
+      await axios.post(`${baseAuthUrl}/request-password-reset `, { email });
       setMessage("Password reset link sent to your email.");
       setError("");
     } catch (error) {

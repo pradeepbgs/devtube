@@ -13,6 +13,7 @@ import Loader from "../../components/Loader";
 import Description from "../../components/Description";
 const LazyCommentPage = React.lazy(() => import("./CommentPage"));
 import ErrorPage from '../../components/Error'
+import { baseVideoUrl } from "../../utils/baseUrl";
 
 const Watchpage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +58,7 @@ const Watchpage = () => {
   const getVideoDetails = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`/api/v1/videos/${videoId}`, {
+      const response = await axios.get(`${baseVideoUrl}/${videoId}`, {
         withCredentials: true,
       });
 

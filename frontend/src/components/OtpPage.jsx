@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { baseAuthUrl } from '../utils/baseUrl';
 
-const OtpVerification = () => {
+const OtpVerification = (email) => {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const OtpVerification = () => {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/v1/users/verify-otp', { otp }, { withCredentials: true });
+      const response = await axios.post(`${baseAuthUrl}/verify-otp`, { email,otp }, { withCredentials: true });
       if (response.status === 200) {
         navigate('/login');
       }

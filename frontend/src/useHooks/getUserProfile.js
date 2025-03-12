@@ -1,10 +1,11 @@
 import { addUser } from "../utils/userSlice";
 import axios from "axios";
+import { baseUserUrl } from "../utils/baseUrl";
 
 const getUserprofile = async (dispatch, username) => {
     try {
       const res = await axios.get(
-        `/api/v1/users/c/${username}`,
+        `${baseUserUrl}/c/${username}`,
         { withCredentials: true }
       );
       if (res) {

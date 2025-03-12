@@ -13,7 +13,7 @@ def consume_rabbitmq():
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
         channel = connection.channel()
         channel.queue_declare(queue=QUEUE_NAME, durable=True)
-        print("is consumer working")
+        print("Consumer started...")
 
         channel.basic_consume(queue=QUEUE_NAME, on_message_callback=callback)
         channel.start_consuming()

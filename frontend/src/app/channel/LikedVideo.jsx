@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import VideoCard from '../videoComponents/VideoCard';
 import { addLikedVideos } from '../../utils/userSlice';
+import { baseLikeUrl } from '../../utils/baseUrl';
 
 const LikedVideo = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +12,7 @@ const LikedVideo = () => {
 
   const fetchLikedVideos = async () => {
     try {
-      const response = await axios.get('/api/v1/likes/videos', { withCredentials: true });
+      const response = await axios.get(`${baseLikeUrl}/videos`, { withCredentials: true });
       if (response?.data?.data) {
         dispatch(addLikedVideos(response?.data?.data));
         setIsLoading(true);

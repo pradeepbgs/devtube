@@ -5,6 +5,7 @@ import { addVideos } from "../../utils/videos.slice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import ErrorPage from "../../components/Error";
+import { baseVideoUrl } from "../../utils/baseUrl";
 
 const VideoContainer = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const VideoContainer = () => {
     try {
       setError(""); // Reset error before making a request
 
-      const response = await axios.get(`/api/v1/videos?page=${page}`, { withCredentials: true });
+      const response = await axios.get(`${baseVideoUrl}?page=${page}`, { withCredentials: true });
 
       if (response.status === 200 && response?.data?.data?.length > 0) {
         dispatch(addVideos(response?.data?.data));

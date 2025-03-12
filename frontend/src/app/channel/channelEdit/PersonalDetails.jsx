@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getCurrentUser } from '../../../useHooks/getCurrenttUser'
 import {updateUser} from '../../../utils/authSlice'
+import { baseUserUrl } from '../../../utils/baseUrl'
 
 const PersonalDetails = () => {
   const { user, currentUser } = useSelector(state => state.user)
@@ -17,7 +18,7 @@ const PersonalDetails = () => {
     e.preventDefault()
     setIsLoading(true)
     try {
-      const res = await axios.patch(`/api/v1/users/update-account-details`,
+      const res = await axios.patch(`${baseUserUrl}/update-account-details`,
         {
           fullname: name,
           username: username,

@@ -6,6 +6,7 @@ import { addVideo } from '../../utils/userSlice';
 import axios from 'axios';
 import VideoCard from '../videoComponents/VideoCard';
 import Loader from '../../components/Loader';
+import { baseVideoUrl } from '../../utils/baseUrl';
 
 const ChannelVideoPage = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const ChannelVideoPage = () => {
   const getUserVideos = async () => {
     try {
       const res = await axios.get(
-        `/api/v1/videos/c/${user?._id}`,
+        `${baseVideoUrl}/c/${user?._id}`,
         { withCredentials: true }
       );
       if (res) {

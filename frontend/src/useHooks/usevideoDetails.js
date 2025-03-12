@@ -3,13 +3,14 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setVideo, setOwner, setSubscribers, isSubscribed, setLikes , setComments} from '../utils/videoSlice';
+import { baseCommentUrl, baseVideoUrl } from '../utils/baseUrl';
 
 const useVideoDetails = (videoId) => {
   const dispatch = useDispatch();
 
   const getVideoDetails = async () => {
     try {
-      const response = await axios.get(`/api/v1/videos/${videoId}`, { withCredentials: true });
+      const response = await axios.get(`${baseVideoUrl}/${videoId}`, { withCredentials: true });
 
       if (response) {
         const video = response.data.data;
@@ -35,7 +36,7 @@ const useVideoComments = async (videoId) => {
 
   const getVideoComments = async () => {
     try {
-      const response = await axios.get(`/api/v1/comments/${videoId}`, { withCredentials: true });
+      const response = await axios.get(`${baseCommentUrl}/${videoId}`, { withCredentials: true });
       if (response) {
         const comments = response.data.data;
         dispatch(setComments(comments));

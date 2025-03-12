@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import OtpPage from '../../components/OtpPage';
+import { baseAuthUrl } from '../../utils/baseUrl';
 
 const Signup = () => {
-  const [otpPage, setOtpPage] = useState(true)
+  const [otpPage, setOtpPage] = useState(false)
   const [error, setError] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const Signup = () => {
     coverImage: null,
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -40,10 +41,10 @@ const Signup = () => {
     //   data.append('coverImage', formData.coverImage);
     // }
     try {
-      const res = await axios.post('/api/v1/users/register', data, {
+      const res = await axios.post(`${baseAuthUrl}/register`, data, {
         withCredentials: true,
       });
-
+      
       if (res.status === 201) {
         setSignupEmail(formData.email)
         setOtpPage(true)

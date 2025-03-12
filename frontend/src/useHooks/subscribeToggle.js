@@ -1,5 +1,6 @@
 import axios from "axios"
 import { isSubscribed } from "../utils/videoSlice"
+import { baseSubscriptionUrl } from "../utils/baseUrl";
 
 const toggleSubscribe = async (channelId, dispatch) => {
     
@@ -7,8 +8,8 @@ const toggleSubscribe = async (channelId, dispatch) => {
 
     try {
         const response = await axios.post(
-          `/api/v1/subscriptions/c/${channelId}`,
-          null, // Set the request payload to null since it's a POST request
+          `${baseSubscriptionUrl}/c/${channelId}`,
+          null,
           { withCredentials: true }
         );
           if(response.data.message === "subscribed successfully"){
