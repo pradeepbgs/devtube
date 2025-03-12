@@ -4,18 +4,20 @@ import axios from "axios";
 import LoaderSpinner from "../../components/Loader";
 import NotFound from "../../components/NotFound";
 import VideoListings from "./VideoListings";
+import { baseVideoUrl } from "../../utils/baseUrl";
 
 const SearchVideoListingPage = () => {
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  
-  const location = useLocation();
-  const query = new URLSearchParams(location.search).get("query");
 
+  const location = useLocation();
+  console.log(location.key)
+  const query = new URLSearchParams(location.search).get("query");
   const fetchVideos = async () => {
     try {
-      const response = await axios.get(`/api/v1/videos?query=${query}`, { withCredentials: true });
+      const response = await axios.get(`${baseVideoUrl}?query=${query}`, { withCredentials: true });
+      console.log('res', response)
       if (response.data.data?.length > 0) {
         setVideos(response.data.data);
       } else {
@@ -32,7 +34,7 @@ const SearchVideoListingPage = () => {
     if (query) {
       fetchVideos();
     }
-  }, [query]);
+  }, [location.key,query]);
 
   return (
     <div className="w-full h-full ml-3">

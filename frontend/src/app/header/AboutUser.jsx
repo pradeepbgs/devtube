@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../utils/authSlice';
 import axios from 'axios';
-import {useSelector} from 'react-redux'
+import { baseAuthUrl } from '../../utils/baseUrl';
 
 const AboutUser = ({user}) => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const AboutUser = ({user}) => {
 
     const logoutUser = async () => {
         try {
-          await axios.post("/api/v1/users/logout", null, {
+          await axios.post(`${baseAuthUrl}/logout`, null, {
             withCredentials: true,
           });
           dispatch(logout());
@@ -25,7 +25,6 @@ const AboutUser = ({user}) => {
         }
       };
     
-console.log(user)
   return (
     <div className='bg-zinc-800 h-[30vw] w-[19vw] rounded-md'>
         <div className='flex px-3 border border-t-0 border-l-0 border-r-0 pb-3'>

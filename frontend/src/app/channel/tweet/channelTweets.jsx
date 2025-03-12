@@ -5,6 +5,7 @@ import TweetCard from './TweetCard';
 import { getUserTweets } from '../../../useHooks/getUserTweets';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../../components/Loader';
+import { baseTweetUrl } from '../../../utils/baseUrl';
 
 const ChannelTweets = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +16,7 @@ const ChannelTweets = () => {
   const handleAddTweet = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`/api/v1/tweets`, { content: tweet }, { withCredentials: true });
+      const res = await axios.post(`${baseTweetUrl}`, { content: tweet }, { withCredentials: true });
       if (res?.data?.data) {
         setTweet('');
         setIsLoading(true);

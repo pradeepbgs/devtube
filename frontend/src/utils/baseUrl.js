@@ -1,0 +1,8 @@
+export const baseAuthUrl = '/api/v1/auth'
+export const baseUserUrl = '/api/v1/user'
+export const basePlayListUrl = '/api/v1/playlist'
+export const baseVideoUrl = '/api/v1/video'
+export const baseCommentUrl = '/api/v1/comment'
+export const baseTweetUrl = '/api/v1/tweet'
+export const baseSubscriptionUrl = '/api/v1/subscription'
+export const baseLikeUrl = '/api/v1/like'

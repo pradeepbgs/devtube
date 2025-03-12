@@ -132,7 +132,7 @@ export class UserService {
             }
 
             const user: UserDocument | null = await this.userRepository.FindExistingUser(email, username);
-            if (!user || !user.isVerified) {
+            if (!user) {
                 console.log("user not found");
                 return ctx.json({ status: 404, message: "User not found" }, 404);
             }

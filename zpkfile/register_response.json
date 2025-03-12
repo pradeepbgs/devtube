@@ -1,94 +1,83 @@
 {
  "request": {
   "Body": {
-   "email": "kumarpradeepbgs@gmail.com"
+   "email": "kumarpradeepbgs@gmail.com",
+   "fullname": "exvillager",
+   "password": "exvillager",
+   "username": "exvillager"
   },
   "Headers": {
    "Method": "POST"
   },
-  "URL": "http://localhost:3001/api/v1/user/request-verification-otp"
+  "URL": "http://localhost:3000/api/v1/auth/register"
  },
  "response": {
-  "Body": "eyJzdGF0dXMiOjIwMCwibWVzc2FnZSI6Ik9UUCBzZW50IHN1Y2Nlc3NmdWxseSJ9",
+  "Body": "eyJzdGF0dXNDb2RlIjoyMDEsImRhdGEiOm51bGwsIm1lc3NhZ2UiOiIgT1RQIHNlbnQgdG8gZW1haWwuIiwic3VjY2VzcyI6dHJ1ZX0=",
   "Headers": {
-   "Access-Control-Allow-Credentials": [
-    "false"
-   ],
-   "Access-Control-Allow-Headers": [
-    "Content-Type,Authorization"
-   ],
-   "Access-Control-Allow-Methods": [
-    "GET,POST,PUT,DELETE"
-   ],
-   "Access-Control-Allow-Origin": [
-    "*"
-   ],
-   "Cache-Control": [
-    "no-cache"
-   ],
    "Content-Length": [
-    "48"
-   ],
-   "Content-Security-Policy": [
-    "default-src 'self'"
+    "77"
    ],
    "Content-Type": [
     "application/json; charset=utf-8"
    ],
    "Date": [
-    "Thu, 06 Mar 2025 05:31:18 GMT"
+    "Wed, 12 Mar 2025 11:07:33 GMT"
    ],
-   "X-Content-Type-Options": [
-    "nosniff"
+   "Etag": [
+    "W/\"4d-fDQHwP8QqzMBuCWrxxzRdfLLKh8\""
    ],
-   "X-Frame-Options": [
-    "DENY"
-   ]
-  },
-  "Status": "200 OK"
- }
-}
--Options": [
-    "DENY"
+   "X-Powered-By": [
+    "Express"
    ]
   },
   "Status": "201 Created"
  }
 }
-"DENY"
-   ]
-  },
-  "Status": "409 Conflict"
- }
-}
-Control": [
-    "no-cache"
-   ],
-   "Connection": [
-    "keep-alive"
-   ],
+Vza3RvcC9kZXZ0dWJlL2RldnR1YmUtbm9kZS9ub2RlX21vZHVsZXMvbm9kZW1haWxlci9saWIvc210cC1jb25uZWN0aW9uL2luZGV4LmpzOjc5NToyMCk8YnI+ICZuYnNwOyAmbmJzcDthdCAmbHQ7YW5vbnltb3VzJmd0OyAoL2hvbWUvcHJhZGVlcC9EZXNrdG9wL2RldnR1YmUvZGV2dHViZS1ub2RlL25vZGVfbW9kdWxlcy9ub2RlbWFpbGVyL2xpYi9zbXRwLWNvbm5lY3Rpb24vaW5kZXguanM6MjM3OjIyKTwvcHJlPgo8L2JvZHk+CjwvaHRtbD4K",
+  "Headers": {
    "Content-Length": [
-    "383"
+    "567"
    ],
    "Content-Security-Policy": [
-    "default-src 'self'"
+    "default-src 'none'"
    ],
    "Content-Type": [
-    "application/json; charset=utf-8"
+    "text/html; charset=utf-8"
    ],
    "Date": [
-    "Sat, 15 Feb 2025 10:45:49 GMT"
-   ],
-   "Server": [
-    "nginx/1.18.0 (Ubuntu)"
+    "Wed, 12 Mar 2025 10:03:21 GMT"
    ],
    "X-Content-Type-Options": [
     "nosniff"
    ],
-   "X-Frame-Options": [
-    "DENY"
+   "X-Powered-By": [
+    "Express"
    ]
   },
-  "Status": "201 Created"
+  "Status": "500 Internal Server Error"
+ }
+}
+c0OjE0KTxicj4gJm5ic3A7ICZuYnNwO2F0IGVtaXQgKG5vZGU6ZXZlbnRzOjg3OjIyKTxicj4gJm5ic3A7ICZuYnNwO2F0IGFkZENodW5rIChpbnRlcm5hbDpzdHJlYW1zL3JlYWRhYmxlOjI2NTo0Nyk8YnI+ICZuYnNwOyAmbmJzcDthdCByZWFkYWJsZUFkZENodW5rUHVzaEJ5dGVNb2RlIChpbnRlcm5hbDpzdHJlYW1zL3JlYWRhYmxlOjI0MzoxOCk8YnI+ICZuYnNwOyAmbmJzcDthdCBkYXRhIChub2RlOm5ldDo3ODo1Nik8L3ByZT4KPC9ib2R5Pgo8L2h0bWw+Cg==",
+  "Headers": {
+   "Content-Length": [
+    "1111"
+   ],
+   "Content-Security-Policy": [
+    "default-src 'none'"
+   ],
+   "Content-Type": [
+    "text/html; charset=utf-8"
+   ],
+   "Date": [
+    "Wed, 12 Mar 2025 10:00:59 GMT"
+   ],
+   "X-Content-Type-Options": [
+    "nosniff"
+   ],
+   "X-Powered-By": [
+    "Express"
+   ]
+  },
+  "Status": "500 Internal Server Error"
  }
 }

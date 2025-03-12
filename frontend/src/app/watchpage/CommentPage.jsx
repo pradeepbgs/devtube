@@ -1,11 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setComments } from "../../utils/videoSlice";
 import { useParams } from "react-router-dom";
 import { useComment } from "../../useHooks/useComment";
 import { MdMoreVert } from "react-icons/md";
 import { getTimeElapsed } from "../../utils/getTimeAGo";
+import { baseCommentUrl } from "../../utils/baseUrl";
 
 const CommentPage = () => {
   const [makeApiForComment, setMakeApiForComment] = useState(false);
@@ -23,7 +24,7 @@ const CommentPage = () => {
   const getVideoComments = async () => {
     try {
       const response = await axios.get(
-        `/api/v1/comments/${videoId}`,
+        `${baseCommentUrl}/${videoId}`,
         { withCredentials: true }
       );
       if (response) {
@@ -48,7 +49,7 @@ const CommentPage = () => {
   const handleDeleteComment = async (commentId) => {
     if (commentId?.owner?._id === user?._id) {
       const res = await axios.delete(
-        `/api/v1/comments/c/${commentId?._id}`,
+        `${baseCommentUrl}/c/${commentId?._id}`,
         { withCredentials: true }
       );
 
@@ -63,7 +64,7 @@ const CommentPage = () => {
 
   const handleUpdateComment = async (commentId) => {
     const res = await axios.put(
-      `/api/v1/comments/c/${commentId?.id}`,
+      `${baseCommentUrl}/c/${commentId?.id}`,
       {
         content: isComment,
       },
@@ -84,7 +85,6 @@ const CommentPage = () => {
     getVideoComments()
   }, [makeApiForComment])
 
-console.log(comments)
   return (
     <>
       <div className="rounded-md mt-3 h-screen">
@@ -185,4 +185,4 @@ console.log(comments)
 
 
 
-export default CommentPage;
+export default React.memo(CommentPage);

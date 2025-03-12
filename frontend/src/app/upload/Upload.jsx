@@ -1,10 +1,9 @@
 import React,{useState} from 'react';
 import { useDispatch } from 'react-redux';
-import { showUploadPage } from '../../utils/toggleSlice';
 import axios from 'axios';
 import RollingSVG from '../../assets/Rolling-2.6s-24px (1).svg';
 import { useNavigate } from 'react-router-dom';
-
+import { baseVideoUrl } from '../../utils/baseUrl';
 
 
 const UploadPage = () => {
@@ -24,7 +23,7 @@ const UploadPage = () => {
 
     try {
       setLoading(true)
-      const res = await axios.post(`/api/v1/videos/`, formData, {
+      const res = await axios.post(`${baseVideoUrl}`, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',

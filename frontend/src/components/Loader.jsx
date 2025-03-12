@@ -1,5 +1,5 @@
 import React from 'react';
-import { Audio, TailSpin, Oval, RotatingLines } from 'react-loader-spinner';
+import { RotatingLines } from 'react-loader-spinner';
 
 const Loader = () => {
   return (
