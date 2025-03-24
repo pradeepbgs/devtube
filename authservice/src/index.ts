@@ -6,11 +6,19 @@ import { fileSaveMiddleware } from "./middleware/saveFile";
 import {StartRabbitMQ } from "./service/rabbitMQ/consumer";
 import { verifyJwt } from "./middleware/auth.middleware";
 
+
 const app = new Diesel();
 const port = process.env.PORT
 
 const log = (level: string, message: string, meta?: object) => {
-    console.log('\n' + JSON.stringify({ level, message, timestamp: new Date().toISOString(), ...meta }) + '\n');
+    console.log(
+        '\n' + 
+        JSON.stringify({ 
+        level, 
+        message, 
+        timestamp: new Date().toISOString(), 
+        ...meta }) 
+        + '\n');
 };
 
 // cors
@@ -41,32 +49,7 @@ app
     .permitAll()
     .authenticate([verifyJwt])
 
-// Hooks setup
-app.addHooks("onRequest", async (req: Request, url: URL) => {
-    const start = Date.now();
-
-    log("info", "Incoming Request", {
-        method: req.method,
-        url,
-        headers: {
-            "user-agent": req.headers.get("user-agent"),
-            "content-type": req.headers.get("content-type"),
-        },
-        body: req.body,
-    });
-
-    req.startTime = start;
-});
-
-app.addHooks("postHandler", (ctx: ContextType) => {
-    const duration = Date.now() - ctx.req.startTime;
-
-    log("info", "Response Sent", {
-        url: ctx.req.url,
-        // status: ctx.statusCode,
-        duration: `${duration}ms`,
-    });
-})
+app.use(advancedLogger(app) as any)
 
 app.addHooks("onError", (error: any, req: Request, url: URL) => {
     log("error", "Unhandled Error", {
@@ -89,8 +72,12 @@ app.get("/", (ctx) => {
     return ctx.json({message:"Welcome to auth service"})
 })
 
-import userRoute from './routes/route'
-app.route("/api/v1/user",userRoute)
+import { userRouter } from "./routes/user.route";
+import { authRouter } from "./routes/auth.route";
+import { advancedLogger } from "diesel-core/logger";
+
+app.route("/api/v1/user",userRouter)
+app.route('/api/v1/auth', authRouter)
 
 
 
