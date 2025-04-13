@@ -31,7 +31,7 @@ DevTube is a platform where users can upload, watch, and interact with videos. I
 
 - **Backend:**
   - Nodejs
-    - For building authService
+    - For authService
   - Python ( FastApi )
     - For Email Service
   - Golang ( Fiber )
