@@ -12,7 +12,7 @@
   "URL": "http://localhost:3001/api/v1/auth/register"
  },
  "response": {
-  "Body": "eyJtZXNzYWdlIjoiT1RQIHNlbnQgdG8gZW1haWwuIn0=",
+  "Body": "eyJzdGF0dXMiOjQyOSwibWVzc2FnZSI6IlRvbyBtYW55IGF0dGVtcHRzLiBUcnkgYWdhaW4gbGF0ZXIuIn0=",
   "Headers": {
    "Access-Control-Allow-Credentials": [
     "false"
@@ -30,7 +30,7 @@
     "no-cache"
    ],
    "Content-Length": [
-    "32"
+    "62"
    ],
    "Content-Security-Policy": [
     "default-src 'self'"
@@ -39,7 +39,7 @@
     "application/json; charset=utf-8"
    ],
    "Date": [
-    "Sun, 13 Apr 2025 07:04:01 GMT"
+    "Sun, 13 Apr 2025 10:55:10 GMT"
    ],
    "Strict-Transport-Security": [
     "max-age=31536000; includeSubDomains"
@@ -51,14 +51,13 @@
     "DENY"
    ]
   },
-  "Status": "201 Created"
+  "Status": "429 Too Many Requests"
  }
 }
-ngth": [
-    "567"
-   ],
-   "Content-Security-Policy": [
-    "default-src 'none'"
+ Requests"
+ }
+}
+ult-src 'none'"
    ],
    "Content-Type": [
     "text/html; charset=utf-8"
