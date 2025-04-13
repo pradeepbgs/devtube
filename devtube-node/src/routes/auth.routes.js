@@ -16,7 +16,7 @@ import { upload } from "../middlewares/multer.middleware";
 export const authRouter = Router();
 
 authRouter.post('/register',upload.none(), registerUser)
-authRouter.post('/login', loginUser)
+authRouter.post('/login', upload.none(),loginUser)
 authRouter.post('/logout', logoutUser)
 authRouter.post("/reset-password",ResetPassword)
 authRouter.get("/reset-password", ServeResetPasswordForm)

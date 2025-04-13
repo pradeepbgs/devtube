@@ -4,3 +4,4 @@ root.cookie.pkfile
 /*.venv
 zpkfile
 docker-compose.yml
+email_service_django
