@@ -5,6 +5,7 @@ import { redis } from "./redis";
 import { sendToEmailQueue } from "./rabbitMQ/producer";
 import { CleanUpResource } from "../utils/cleanup";
 import type { UserDocument } from "../model/user.model";
+import { getHashedPassword } from "../utils/service";
 
 
 export class AuthService {
@@ -73,10 +74,11 @@ export class AuthService {
                     let user: UserDocument;
         
                     if (existingUser && !existingUser.isVerified) {
+                        let hashedPassword = await getHashedPassword(password)
                         user= this.userRepository.UpdateUser(existingUser._id as Types.ObjectId, {
                             fullname,
                             email,
-                            password,
+                            password: hashedPassword,
                             username: username.toLowerCase(),
                         });
                     } else {
@@ -128,7 +130,7 @@ export class AuthService {
                 try {
                     const { email, username, password } = await ctx.body;
         
-                    if (!email || !password) {
+                    if (!(email || username) || !password) {
                         console.log("email and password are required");
                         return ctx.json({ status: 400, message: "Email and password are required" }, 400);
                     }

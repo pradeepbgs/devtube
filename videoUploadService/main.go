@@ -34,7 +34,11 @@ func main() {
 	app.Use("/api/v1/video/upload",middleware.AuthJwt)
 
 	app.Get("/", func (c fiber.Ctx) error  {
-		return c.SendString("Hello World from video upload service")
+		return c.SendString("Welcome to video upload service")
+	})
+
+	app.Get("/health", func (c fiber.Ctx) error  {
+		return c.SendString("lady boy i'm good and healthy")
 	})
 
 	routes.SetupRoutes(app)

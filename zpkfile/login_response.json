@@ -1,40 +1,16 @@
 {
  "request": {
   "Body": {
-   "email": "kumarpradeepbgs@gmail.com",
-   "password": "linux"
+   "password": "exvillager",
+   "username": "ex_villager"
   },
   "Headers": {
    "Method": "POST"
   },
-  "URL": "http://localhost:3000/api/v1/user/login"
+  "URL": "http://localhost:3001/api/v1/auth/login"
  },
  "response": {
-  "Body": "PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KPHRpdGxlPkVycm9yPC90aXRsZT4KPC9oZWFkPgo8Ym9keT4KPHByZT5DYW5ub3QgUE9TVCAvYXBpL3YxL3VzZXIvbG9naW48L3ByZT4KPC9ib2R5Pgo8L2h0bWw+Cg==",
-  "Headers": {
-   "Content-Length": [
-    "157"
-   ],
-   "Content-Security-Policy": [
-    "default-src 'none'"
-   ],
-   "Content-Type": [
-    "text/html; charset=utf-8"
-   ],
-   "Date": [
-    "Wed, 12 Mar 2025 10:40:23 GMT"
-   ],
-   "X-Content-Type-Options": [
-    "nosniff"
-   ],
-   "X-Powered-By": [
-    "Express"
-   ]
-  },
-  "Status": "404 Not Found"
- }
-}
-daaE0yRXhOVE13TTJGaE5ERm1abU16WVRNaUxDSnBZWFFpT2pFM05ERXlNemt5T0RJc0ltVjRjQ0k2TVRjME1qRXdNekk0TW4wLkcyRWZ2MEJzcS1oMXZrN3YteGtxd2dPN3VkeWpIWm8yeUkzX0Jib0t5ckUiLCJyZWZyZXNoVG9rZW4iOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKZmFXUWlPaUkyTjJNM1pXWmhNMkV4TlRNd00yRmhOREZtWm1NellUTWlMQ0psYldGcGJDSTZJbXQxYldGeWNISmhaR1ZsY0dKbmMwQm5iV0ZwYkM1amIyMGlMQ0oxYzJWeWJtRnRaU0k2SW1OcGRIbHZabVJsWVdSd1pXOXdiR1VpTENKbWRXeHNibUZ0WlNJNkluQnlZV1JsWlhBZ2EzVnRZWElpTENKcFlYUWlPakUzTkRFeU16a3lPRElzSW1WNGNDSTZNVGMwTWpFd016STRNbjAuTTl1ZF9oaFdNZXhUUTJwbVN3QlBGNmQxV0s5aFZSa3RUemEtTUdfMGFmRSJ9",
+  "Body": "eyJtZXNzYWdlIjoiVXNlciBsb2dnZWQgaW4gc3VjY2Vzc2Z1bGx5IiwidXNlciI6eyJfaWQiOiI2N2ZiNjFjMmM4NGE4ZDkxMzAzNTM0OTAiLCJ1c2VybmFtZSI6ImV4X3ZpbGxhZ2VyIiwiZW1haWwiOiJleHZpbGxhZ2VyYmdzQGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiZXh2aWxsYWdlciIsImF2YXRhciI6Imh0dHBzOi8vY2RuLWljb25zLXBuZy5mbGF0aWNvbi5jb20vNTEyLzE3LzE3MDA0LnBuZyIsIndhdGNoSGlzdG9yeSI6W10sImlzVmVyaWZpZWQiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjUtMDQtMTNUMDc6MDM6MzAuMjMwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDQtMTNUMDc6MDQ6NTguNjA0WiIsIl9fdiI6MH0sImFjY2Vzc1Rva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmZhV1FpT2lJMk4yWmlOakZqTW1NNE5HRTRaRGt4TXpBek5UTTBPVEFpTENKcFlYUWlPakUzTkRRMU1qYzRPVGdzSW1WNGNDSTZNVGMwTlRNNU1UZzVPSDAuNWZvYXVDbTdDeFpCMFVfelVMT1lmNHUxUElYWXNGM1EwWlBFMG1CdHlEcyIsInJlZnJlc2hUb2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpmYVdRaU9pSTJOMlppTmpGak1tTTROR0U0WkRreE16QXpOVE0wT1RBaUxDSmxiV0ZwYkNJNkltVjRkbWxzYkdGblpYSmlaM05BWjIxaGFXd3VZMjl0SWl3aWRYTmxjbTVoYldVaU9pSmxlRjkyYVd4c1lXZGxjaUlzSW1aMWJHeHVZVzFsSWpvaVpYaDJhV3hzWVdkbGNpSXNJbWxoZENJNk1UYzBORFV5TnpnNU9Dd2laWGh3SWpveE56UTFNemt4T0RrNGZRLnoyVkx0RGhaZzRDVGYwN3lzdWNxVlZqNFkyaEpMMDU2eHpubnloR29pNkkifQ==",
   "Headers": {
    "Access-Control-Allow-Credentials": [
     "false"
@@ -52,7 +28,7 @@ daaE0yRXhOVE13TTJGaE5ERm1abU16WVRNaUxDSnBZWFFpT2pFM05ERXlNemt5T0RJc0ltVjRjQ0k2TV
     "no-cache"
    ],
    "Content-Length": [
-    "864"
+    "841"
    ],
    "Content-Security-Policy": [
     "default-src 'self'"
@@ -61,11 +37,14 @@ daaE0yRXhOVE13TTJGaE5ERm1abU16WVRNaUxDSnBZWFFpT2pFM05ERXlNemt5T0RJc0ltVjRjQ0k2TV
     "application/json; charset=utf-8"
    ],
    "Date": [
-    "Thu, 06 Mar 2025 05:34:42 GMT"
+    "Sun, 13 Apr 2025 07:04:57 GMT"
    ],
    "Set-Cookie": [
-    "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M3ZWZhM2ExNTMwM2FhNDFmZmMzYTMiLCJpYXQiOjE3NDEyMzkyODIsImV4cCI6MTc0MjEwMzI4Mn0.G2Efv0Bsq-h1vk7v-xkqwgO7udyjHZo2yI3_BboKyrE; HttpOnly; SameSite=Lax",
-    "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M3ZWZhM2ExNTMwM2FhNDFmZmMzYTMiLCJlbWFpbCI6Imt1bWFycHJhZGVlcGJnc0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImNpdHlvZmRlYWRwZW9wbGUiLCJmdWxsbmFtZSI6InByYWRlZXAga3VtYXIiLCJpYXQiOjE3NDEyMzkyODIsImV4cCI6MTc0MjEwMzI4Mn0.M9ud_hhWMexTQ2pmSwBPF6d1WK9hVRktTza-MG_0afE; HttpOnly; SameSite=Lax"
+    "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2ZiNjFjMmM4NGE4ZDkxMzAzNTM0OTAiLCJpYXQiOjE3NDQ1Mjc4OTgsImV4cCI6MTc0NTM5MTg5OH0.5foauCm7CxZB0U_zULOYf4u1PIXYsF3Q0ZPE0mBtyDs; HttpOnly; SameSite=Lax",
+    "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2ZiNjFjMmM4NGE4ZDkxMzAzNTM0OTAiLCJlbWFpbCI6ImV4dmlsbGFnZXJiZ3NAZ21haWwuY29tIiwidXNlcm5hbWUiOiJleF92aWxsYWdlciIsImZ1bGxuYW1lIjoiZXh2aWxsYWdlciIsImlhdCI6MTc0NDUyNzg5OCwiZXhwIjoxNzQ1MzkxODk4fQ.z2VLtDhZg4CTf07ysucqVVj4Y2hJL056xznnyhGoi6I; HttpOnly; SameSite=Lax"
+   ],
+   "Strict-Transport-Security": [
+    "max-age=31536000; includeSubDomains"
    ],
    "X-Content-Type-Options": [
     "nosniff"
@@ -77,9 +56,7 @@ daaE0yRXhOVE13TTJGaE5ERm1abU16WVRNaUxDSnBZWFFpT2pFM05ERXlNemt5T0RJc0ltVjRjQ0k2TV
   "Status": "200 OK"
  }
 }
-ly; SameSite=Lax"
-   ],
-   "X-Content-Type-Options": [
+nt-Type-Options": [
     "nosniff"
    ],
    "X-Frame-Options": [

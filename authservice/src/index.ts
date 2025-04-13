@@ -38,13 +38,14 @@ app.use("/api/v1/user/update", fileSaveMiddleware)
 app
     .setupFilter()
     .routeMatcher(
-        "/api/v1/user/register", 
-        "/api/v1/user/login", 
-        "/api/v1/user/verify-otp",
-        "/api/v1/user/reset-password",
-        "/api/v1/user/request-password-reset",
-        "/api/v1/user/request-verification-otp",
-        "/api/v1/user/verify-otp"
+        "/api/v1/auth/register", 
+        "/api/v1/auth/login", 
+        "/api/v1/auth/verify-otp",
+        "/api/v1/auth/reset-password",
+        "/api/v1/auth/request-password-reset",
+        "/api/v1/auth/request-verification-otp",
+        "/api/v1/auth/verify-otp",
+        "/"
     )
     .permitAll()
     .authenticate([verifyJwt])

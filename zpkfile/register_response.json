@@ -1,41 +1,60 @@
 {
  "request": {
   "Body": {
-   "email": "kumarpradeepbgs@gmail.com",
+   "email": "exvillagerbgs@gmail.com",
    "fullname": "exvillager",
    "password": "exvillager",
-   "username": "exvillager"
+   "username": "ex_villager"
   },
   "Headers": {
    "Method": "POST"
   },
-  "URL": "http://localhost:3000/api/v1/auth/register"
+  "URL": "http://localhost:3001/api/v1/auth/register"
  },
  "response": {
-  "Body": "eyJzdGF0dXNDb2RlIjoyMDEsImRhdGEiOm51bGwsIm1lc3NhZ2UiOiIgT1RQIHNlbnQgdG8gZW1haWwuIiwic3VjY2VzcyI6dHJ1ZX0=",
+  "Body": "eyJtZXNzYWdlIjoiT1RQIHNlbnQgdG8gZW1haWwuIn0=",
   "Headers": {
+   "Access-Control-Allow-Credentials": [
+    "false"
+   ],
+   "Access-Control-Allow-Headers": [
+    "Content-Type,Authorization"
+   ],
+   "Access-Control-Allow-Methods": [
+    "GET,POST,PUT,DELETE"
+   ],
+   "Access-Control-Allow-Origin": [
+    "*"
+   ],
+   "Cache-Control": [
+    "no-cache"
+   ],
    "Content-Length": [
-    "77"
+    "32"
+   ],
+   "Content-Security-Policy": [
+    "default-src 'self'"
    ],
    "Content-Type": [
     "application/json; charset=utf-8"
    ],
    "Date": [
-    "Wed, 12 Mar 2025 11:07:33 GMT"
+    "Sun, 13 Apr 2025 07:04:01 GMT"
    ],
-   "Etag": [
-    "W/\"4d-fDQHwP8QqzMBuCWrxxzRdfLLKh8\""
+   "Strict-Transport-Security": [
+    "max-age=31536000; includeSubDomains"
    ],
-   "X-Powered-By": [
-    "Express"
+   "X-Content-Type-Options": [
+    "nosniff"
+   ],
+   "X-Frame-Options": [
+    "DENY"
    ]
   },
   "Status": "201 Created"
  }
 }
-Vza3RvcC9kZXZ0dWJlL2RldnR1YmUtbm9kZS9ub2RlX21vZHVsZXMvbm9kZW1haWxlci9saWIvc210cC1jb25uZWN0aW9uL2luZGV4LmpzOjc5NToyMCk8YnI+ICZuYnNwOyAmbmJzcDthdCAmbHQ7YW5vbnltb3VzJmd0OyAoL2hvbWUvcHJhZGVlcC9EZXNrdG9wL2RldnR1YmUvZGV2dHViZS1ub2RlL25vZGVfbW9kdWxlcy9ub2RlbWFpbGVyL2xpYi9zbXRwLWNvbm5lY3Rpb24vaW5kZXguanM6MjM3OjIyKTwvcHJlPgo8L2JvZHk+CjwvaHRtbD4K",
-  "Headers": {
-   "Content-Length": [
+ngth": [
     "567"
    ],
    "Content-Security-Policy": [
