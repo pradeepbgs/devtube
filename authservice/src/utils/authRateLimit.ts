@@ -1,13 +1,21 @@
 import type { ContextType } from "diesel-core";
 import { redis } from "../service/redis";
 
-export const authRateLimit = (action: "signup" | "login" | "otp", maxAttempts = 5, windowSec = 900) => {
+export const authRateLimit = (
+    action: "signup" | "login" | "otp" | "reset-password" | "request-reset" | "request-verification",
+    maxAttempts = 5, 
+    windowSec = 900) => {
     return async (ctx: ContextType) => {
-        const {email,username} = await ctx.body
+        const {email,username,userId} = await ctx.body
+        const email_identifier = ctx.query.email
+        const userid_identifier = ctx.query.userid
         
         let keyField
         if (email) keyField = email
         else if (username) keyField = username
+        else if (userId) keyField = userId
+        else if (userid_identifier) keyField = userid_identifier
+        else if (email_identifier) keyField = email_identifier
 
         if (!keyField) return ctx.json({ status: 400, message: "Missing email or username" }, 400);
 
