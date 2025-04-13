@@ -274,7 +274,7 @@ const videoDetails = asyncHandler(async (req, res) => {
           _id: 1,
           fullname: 1,
           username: 1,
-          avatar: 1,
+          avatar: 1 ?? "",
         },
         isSubscribed: 1,
         isLiked: 1,
