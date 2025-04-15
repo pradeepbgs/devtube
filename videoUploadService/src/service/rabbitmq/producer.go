@@ -10,7 +10,8 @@ import (
 
 
 func PublishTask(task db.VideoUploadTask) error {
-	conn, err := amqp091.Dial("amqp://guest:guest@rabbitmq:5672/")
+	// in docker like this - amqp://guest:guest@rabbitmq:5672/
+	conn, err := amqp091.Dial("amqp://guest:guest@localhost:5672/")
 	if err != nil {
 		return err
 	}

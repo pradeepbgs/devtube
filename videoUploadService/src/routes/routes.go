@@ -15,6 +15,8 @@ func SetupRoutes(app *fiber.App){
 	video := api.Group("/video")
 	videoController := controller.VideoController()
 
-	video.Post("/upload",videoController.UploadVideo)
-	video.Put("/update", middleware.AuthJwt)
+	video.Post("/",videoController.UploadVideo)
+	// we have to make two endpoints here
+	video.Patch("/:id", middleware.AuthJwt, videoController.UpdateVideoDetails)
+	video.Delete("/:id", middleware.AuthJwt, videoController.DeleteUserVideo)
 }

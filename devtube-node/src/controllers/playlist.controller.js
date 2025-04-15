@@ -5,8 +5,7 @@ import { apiResponse } from "../utils/apiResponce.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const createPlaylist = asyncHandler(async (req, res) => {
-  const { name, description } = req.body;
-
+  const { name, description } = req.body
   //TODO: create playlist
 
   if (!name) {
@@ -15,6 +14,7 @@ const createPlaylist = asyncHandler(async (req, res) => {
 
   const authenticatedId = req.user;
   if (!authenticatedId) {
+console.log('user is not authenticated')
     return res.status(400).json(new apiError(400, "user is not authenticated"));
   }
 
@@ -24,6 +24,7 @@ const createPlaylist = asyncHandler(async (req, res) => {
     owner: authenticatedId?._id,
   });
   if (!playlist) {
+console.log("playlist doesn't exist")
     return res.status(400).json(new apiError(400, "playlist is not created"));
   }
 

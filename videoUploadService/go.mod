@@ -7,8 +7,11 @@ require (
 	github.com/cloudinary/cloudinary-go/v2 v2.9.1 // indirect
 	github.com/creasty/defaults v1.7.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
+	github.com/gofiber/fiber v1.13.3 // indirect
 	github.com/gofiber/fiber/v3 v3.0.0-beta.4 // indirect
+	github.com/gofiber/limiter v0.1.2 // indirect
 	github.com/gofiber/schema v1.2.0 // indirect
+	github.com/gofiber/utils v0.0.9 // indirect
 	github.com/gofiber/utils/v2 v2.0.0-beta.7 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect

@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FaBars, FaSearch } from "react-icons/fa"; // Import the hamburger icon
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toggleMenu, showUserIcon } from "../../utils/toggleSlice";
 import AboutUser from "./AboutUser";
 import devtubeLogo from '../../assets/devt.avif'
+import { FaGithub } from "react-icons/fa";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -78,6 +79,14 @@ const Header = () => {
               </form>
             </div>
             <div className="flex items-center">
+                {/* Github icon of repository */}
+                <Link 
+                target="_blank"
+                to='https://github.com/pradeepbgs/devtube'>
+                <FaGithub 
+                className="mr-10"
+                size={26} />
+                </Link>
               {!isLoggedIn ? (
                 <div>
                     <Link to="/login">

@@ -125,7 +125,7 @@ const Watchpage = () => {
                 <Link to={`/channel/${Video?.owner?.username}`}>
                   <img
                     className="w-8 h-8 rounded-full"
-                    src={`${Video?.owner?.avatar}`}
+                    src={`${Video?.owner?.avatar ?? 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'}`}
                   />
                 </Link>
                 <div className="ml-3 font-mono text-[0.8rem]">

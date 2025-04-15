@@ -26,7 +26,6 @@ func AuthJwt(c fiber.Ctx) error {
 			"error": "Invalid or expired token",
 		})
 	}
-
 	c.Locals("user", claims)
 	return c.Next()
 }
