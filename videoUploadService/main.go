@@ -13,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/limiter"
+	"github.com/gofiber/fiber/v3/middleware/logger"
 )
 
 func main() {
@@ -28,12 +29,17 @@ func main() {
 	go rabbitmq.StartConsumingTask()
 
 	// Some Middlewares
+	// logger
+	app.Use(logger.New())
+
+	// cors
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:8080"},
 		AllowCredentials: true,
 		AllowMethods:     []string{"GET, POST, PUT, DELETE, OPTIONS"},
 	}))
 
+	// rate-limiter
 	app.Use(limiter.New(limiter.Config{
 		Max:        100,
 		Expiration: 1 * time.Hour,
@@ -42,6 +48,7 @@ func main() {
 		},
 	}))
 
+	// protect these apis
 	app.Use("/api/v1/video", middleware.AuthJwt)
 
 	// Simplpe entry point
