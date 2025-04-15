@@ -42,7 +42,7 @@ func main() {
 		},
 	}))
 
-	app.Use("/api/v1/video/upload", middleware.AuthJwt)
+	app.Use("/api/v1/video", middleware.AuthJwt)
 
 	// Simplpe entry point
 	app.Get("/", func(c fiber.Ctx) error {

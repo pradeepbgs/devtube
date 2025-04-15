@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"videouploadservice/src/db"
-	"videouploadservice/src/middleware"
 	"videouploadservice/src/service/rabbitmq"
 	"videouploadservice/src/utils"
 
@@ -25,7 +24,6 @@ func VideoService() *VideoServiceStruct {
 
 func (v *VideoServiceStruct) UploadVideo(c fiber.Ctx) error {
 	// upload video
-
 	user := c.Locals("user")
 	if user == nil {
 		return c.Status(401).JSON(fiber.Map{"error": "Unauthorized"})
@@ -107,7 +105,6 @@ func (v *VideoServiceStruct) UploadVideo(c fiber.Ctx) error {
 
 // // update video
 func (v *VideoServiceStruct) UpdateVideoDetails(c fiber.Ctx) error {
-	middleware.AuthJwt(c)
 	user := c.Locals("user")
 	if user == nil {
 		return c.Status(401).JSON(fiber.Map{"error": "Unauthorized"})
@@ -242,7 +239,7 @@ func (v *VideoServiceStruct) DeleteUserVideo(c fiber.Ctx) error {
 	video := db.DB.Collection("videos")
 	filter := bson.M{
 		"_id":  videoID,
-		"user": userID,
+		"owner": userID,
 	}
 	result, err := video.DeleteOne(c.Context(), filter)
 	if err != nil {
