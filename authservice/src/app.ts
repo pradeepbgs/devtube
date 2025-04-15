@@ -10,7 +10,7 @@ import { authRouter } from "./routes/auth.route";
 const app = new Diesel();
 
 // Logger
-app.useAdvancedLogger({ app })
+app.useLogger({ app })
 
 // cors
 app.use(

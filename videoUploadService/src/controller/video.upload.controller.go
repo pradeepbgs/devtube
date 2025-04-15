@@ -20,6 +20,10 @@ func (vc *VideoControllerStruct) UploadVideo (c fiber.Ctx) error {
 	return vc.videoService.UploadVideo(c)
 }
 
-func (u *VideoControllerStruct) UpdateVideoDetails (c fiber.Ctx) error {
-	return nil
+func (vc *VideoControllerStruct) UpdateVideoDetails (c fiber.Ctx) error {
+	return vc.videoService.UpdateVideoDetails(c)
+}
+
+func (vc *VideoControllerStruct) DeleteUserVideo (c fiber.Ctx) error {
+	return vc.videoService.DeleteUserVideo(c)
 }

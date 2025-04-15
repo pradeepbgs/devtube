@@ -33,18 +33,19 @@ const ChannelDetailsPage = () => {
   }
 
   return (
-    <div className="bg-gray-900 min-h-screen text-white">
+    <div className="min-h-screen text-white">
       {/* Header/Cover Image Section */}
       <div className="relative">
-        <img
+        {
+         user?.coverImage && <img
           src={user?.coverImage}
           alt="Cover"
           className="w-full h-96 object-cover"
-        />
+        />}
         {/* user details */}
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between mt-20">
           <img
-            src={user?.avatar}
+            src={user?.avatar ?? 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'}
             alt="Avatar"
             className="w-32 h-32 absolute bottom-[-1%] left-3 bg-zinc-900 rounded-full border-4 border-gray-800"
           />

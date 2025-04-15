@@ -22,7 +22,7 @@ const VideoCard = ({ video }) => {
         <Link to={`/channel/${video?.owner?.username}`}>
           <img
             className="w-9 h-9 object-fit bg-gray-100 rounded-full"
-            src={video?.owner?.avatar}
+            src={video?.owner?.avatar ?? 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'}
             alt={`Avatar for ${video?.owner?.fullname}`}
           />
         </Link>
