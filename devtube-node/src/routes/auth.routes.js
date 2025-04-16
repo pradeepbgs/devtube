@@ -8,10 +8,9 @@ import {
     requestVerificationOtp, 
     ResetPassword, 
     ServeResetPasswordForm, 
-    VerifyOTP, 
-    verifyOtpAndActivateUser } from "../controllers/auth.controller";
-import { verifyJwt } from "../middlewares/auth.middleware";
-import { upload } from "../middlewares/multer.middleware";
+    VerifyOTP } from "../controllers/auth.controller.js";
+import { verifyJwt } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 export const authRouter = Router();
 
