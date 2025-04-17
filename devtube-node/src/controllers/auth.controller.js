@@ -1,10 +1,10 @@
-import { OTP } from "../models/otp.model";
-import { User } from "../models/user.model";
-import MailService from "../service/mail.service";
-import Service from "../service/service";
-import { asyncHandler } from "../utils/asyncHandler";
-import {apiError} from '../utils/apiError'
-import {apiResponse} from '../utils/apiResponce'
+import { OTP } from "../models/otp.model.js";
+import { User } from "../models/user.model.js";
+import MailService from "../service/mail.service.js";
+import Service from "../service/service.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import {apiError} from '../utils/apiError.js'
+import {apiResponse} from '../utils/apiResponce.js'
 import bcrypt from 'bcrypt';
 
 

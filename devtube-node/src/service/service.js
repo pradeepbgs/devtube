@@ -1,5 +1,5 @@
-import { User } from "../models/user.model";
-import { apiError } from "../utils/apiError";
+import { User } from "../models/user.model.js";
+import { apiError } from "../utils/apiError.js";
 
 export default class Service {
 
