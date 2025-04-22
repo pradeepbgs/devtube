@@ -91,7 +91,7 @@ func (v *VideoServiceStruct) UploadVideo(c fiber.Ctx) error {
 		Description:   description,
 	}
 
-	if err := rabbitmq.PublishTask(task); err != nil {
+	if err := rabbitmq.UploadVideoTaskProducer(task); err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"error":   "Failed to send task to queue",
 			"message": "Its our server problem , not yours",

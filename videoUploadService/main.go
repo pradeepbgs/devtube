@@ -27,6 +27,7 @@ func main() {
 
 	utils.InitClodinary()
 	go rabbitmq.StartConsumingTask()
+	go rabbitmq.Connect()
 
 	// Some Middlewares
 	// logger

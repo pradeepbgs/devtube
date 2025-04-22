@@ -7,6 +7,9 @@ const EMAIL_QUEUE = process.env.SECOND_QUEUE_NAME || "emailQueue";
 let channel:Channel | null
 let connection: Connection | null = null;
 
+
+
+
 async function connectRabbitMQ() {
     if (channel) return; 
     try {

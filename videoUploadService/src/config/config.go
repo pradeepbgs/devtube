@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"os"
 	"github.com/joho/godotenv"
 )
@@ -14,10 +13,8 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	_ = godotenv.Load()
+	
 	return &Config{
 		Port: os.Getenv("PORT"),
 		MONGODB_URL: os.Getenv("MONGODB_URL"),
